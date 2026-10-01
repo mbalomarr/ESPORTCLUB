@@ -1,6 +1,9 @@
 // Interface text (buttons, labels, headings). Club content lives in /data.
 // `ar` is typed against `en`, so a missing Arabic string is a build error.
 
+/** localStorage key holding the visitor's language choice. */
+export const LANG_STORAGE_KEY = "pmu-lang";
+
 const en = {
   meta: {
     siteName: "PMU E-Sports Club",

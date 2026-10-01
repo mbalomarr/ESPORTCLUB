@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 import { events, games, site } from "@/lib/content";
-import { getDictionary } from "@/lib/i18n/server";
 import EventsBoard from "@/components/sections/EventsBoard";
 import GameVoting from "@/components/sections/GameVoting";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return { title: (await getDictionary()).meta.events };
-}
+export const metadata: Metadata = { title: "Events & Voting" };
 
 export default function EventsPage() {
   return (

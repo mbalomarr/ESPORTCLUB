@@ -13,7 +13,8 @@ live site updates automatically in about **1–2 minutes**, in **both English an
 3. Make your change. Keep the existing pattern: copy an entry, then change the text inside the quotes.
 4. Scroll down, type a short note (e.g. *"Add Valorant Winter Cup"*) and click **Commit changes**.
 
-That's it. Vercel rebuilds the site on its own.
+That's it. GitHub rebuilds and republishes the site on its own. You can watch progress in the
+repository's **Actions** tab (a yellow dot means building, a green ✓ means live).
 
 > **Safety net:** if a file has a typo, the update is rejected and **the current site stays online**.
 > You'll see a red ❌ next to your commit on GitHub. Click it to see a plain-English message such as

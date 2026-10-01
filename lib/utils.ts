@@ -1,5 +1,12 @@
 import type { Lang, Localized } from "./types";
 
+export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+/** Prefix site-relative paths ("/logo.png") with the GitHub Pages base path. Full URLs pass through. */
+export function asset(src: string) {
+  return src.startsWith("/") && !src.startsWith("//") ? `${basePath}${src}` : src;
+}
+
 export function cn(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
 }

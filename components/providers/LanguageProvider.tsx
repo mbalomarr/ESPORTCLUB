@@ -1,8 +1,9 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 import type { Lang, Localized } from "@/lib/types";
-import { dictionaries, type Dictionary } from "@/lib/i18n/dictionary";
+import { dictionaries, LANG_STORAGE_KEY, type Dictionary } from "@/lib/i18n/dictionary";
 import { formatDate, pick } from "@/lib/utils";
 
 interface LanguageContextValue {
@@ -17,17 +18,58 @@ interface LanguageContextValue {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-export function LanguageProvider({ initialLang, children }: { initialLang: Lang; children: React.ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(initialLang);
+const pageTitleKey: Record<string, keyof Dictionary["meta"]> = {
+  "/events": "events",
+  "/about": "about",
+  "/leaderboard": "leaderboard",
+  "/join": "join",
+};
+
+function applyToDocument(lang: Lang) {
+  const html = document.documentElement;
+  html.lang = lang;
+  html.dir = lang === "ar" ? "rtl" : "ltr";
+  html.removeAttribute("data-lang-pending");
+}
+
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  // Always start in English so the first client render matches the static HTML (no hydration
+  // mismatch); a saved preference is applied right after mount.
+  const [lang, setLangState] = useState<Lang>("en");
+  const pathname = usePathname();
+
+  useEffect(() => {
+    let saved: string | null = null;
+    try {
+      saved = localStorage.getItem(LANG_STORAGE_KEY);
+    } catch {}
+    const initial: Lang = saved === "ar" ? "ar" : "en";
+    setLangState(initial);
+    applyToDocument(initial);
+  }, []);
 
   const setLang = useCallback((next: Lang) => {
     setLangState(next);
-    // Cookie lets the server render the right language/direction on the next request.
-    document.cookie = `lang=${next}; path=/; max-age=31536000; samesite=lax`;
-    const html = document.documentElement;
-    html.lang = next;
-    html.dir = next === "ar" ? "rtl" : "ltr";
+    applyToDocument(next);
+    try {
+      localStorage.setItem(LANG_STORAGE_KEY, next);
+    } catch {}
   }, []);
+
+  // Static pages ship English <title>s, and Next.js may (re)insert them after this effect runs,
+  // so re-apply the localized title whenever <head> changes.
+  useEffect(() => {
+    const meta = dictionaries[lang].meta;
+    const key = pageTitleKey[pathname.replace(/\/$/, "")];
+    const title = key ? `${meta[key]} | ${meta.siteName}` : meta.siteName;
+    const sync = () => {
+      if (document.title !== title) document.title = title;
+    };
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(document.head, { childList: true, subtree: true, characterData: true });
+    return () => observer.disconnect();
+  }, [lang, pathname]);
 
   const value = useMemo<LanguageContextValue>(
     () => ({

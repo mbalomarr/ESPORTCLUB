@@ -7,7 +7,7 @@ import { ArrowUpRight, CalendarDays, Clock, Gamepad2, MapPin, Swords, Trophy, ty
 import SectionHeading, { type HeadingLevel } from "@/components/ui/SectionHeading";
 import { useLang } from "@/components/providers/LanguageProvider";
 import type { ClubEvent, EventStatus } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { asset, cn } from "@/lib/utils";
 
 const filterKeys = ["all", "upcoming", "completed"] as const;
 type Filter = (typeof filterKeys)[number];
@@ -95,7 +95,7 @@ function EventCard({ event: e }: { event: ClubEvent }) {
       <div className="relative h-36 overflow-hidden border-b border-line bg-elevated-2">
         {e.image ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={e.image} alt="" className="size-full object-cover" loading="lazy" />
+          <img src={asset(e.image)} alt="" className="size-full object-cover" loading="lazy" />
         ) : (
           <div className="bg-circuit grid size-full place-items-center bg-gradient-to-br from-steel-500/30 to-transparent">
             <Gamepad2 className="size-12 text-steel-500/70" aria-hidden />

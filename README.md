@@ -1,14 +1,14 @@
 # PMU E-Sports Club: Official Website
 
-Next.js 15 (App Router) · Tailwind CSS v4 · Framer Motion · Lucide · next-themes · English/Arabic (RTL) · Git-backed JSON content · Vercel
+Next.js 15 (App Router) · Tailwind CSS v4 · Framer Motion · Lucide · next-themes · English/Arabic (RTL) · Git-backed JSON content · GitHub Pages (static export)
 
 ## Run locally
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
+npm run dev        # http://localhost:3000/ESPORTCLUB/
 npm run validate   # check /data JSON files
-npm run build      # production build (runs validate first)
+npm run build      # static export to ./out (runs validate first)
 ```
 
 Requires Node.js 20+.
@@ -19,7 +19,7 @@ Requires Node.js 20+.
 .
 ├── app/
 │   ├── globals.css          # Tailwind v4: brand palette, light/dark semantic tokens, RTL + Arabic font rules
-│   ├── layout.tsx           # Reads `lang` cookie → <html lang dir>, fonts, providers, Navbar/Footer
+│   ├── layout.tsx           # Fonts, providers, Navbar/Footer, pre-paint language boot script
 │   ├── page.tsx             # /             Hero + overview + live hub
 │   ├── events/page.tsx      # /events       Events board + game voting
 │   ├── about/page.tsx       # /about        About us + leadership roster
@@ -46,22 +46,28 @@ Requires Node.js 20+.
 
 ## How i18n and theming work
 
-- **Language:** `LanguageProvider` holds the active language (default `en`). The toggle updates the React
-  state, `<html lang/dir>` and a `lang` cookie. The root layout reads that cookie, so the server renders the
-  correct language and direction on the first paint, with no flash or hydration mismatch. Pages are therefore
-  rendered on demand (dynamic).
+- **Language:** `LanguageProvider` holds the active language (default `en`) and saves the choice in
+  `localStorage` (`pmu-lang`). Pages are pre-rendered in English. For returning Arabic visitors, a tiny inline
+  script in `<head>` sets `lang="ar" dir="rtl"` before first paint and briefly hides the page until React
+  swaps the text, which avoids both a flash of English and a hydration mismatch.
 - **RTL:** components use logical utilities (`ms-/me-/ps-/pe-/start-/end-/text-start`) plus `rtl:` variants
   (icon flips, gradient directions). Arabic switches to the Cairo font and drops letter-spacing.
 - **Theme:** `next-themes` with `attribute="class"` and `defaultTheme="dark"`. Tailwind v4's equivalent of
   `darkMode: "class"` is `@custom-variant dark` in `globals.css`. Colors are semantic tokens (`bg-bg`,
   `text-fg`, `text-muted`, `border-line`, `text-accent`…) that switch values under `.dark`.
 
-## Deploy (GitHub → Vercel)
+## Deploy (GitHub Pages)
 
-1. Push this folder to a new GitHub repo.
-2. On vercel.com → **Add New → Project** → import the repo → **Deploy** (defaults are correct).
-3. Every commit to `main`, including JSON edits made in the GitHub web editor, redeploys automatically.
-4. Give the professor **Write** access to the repo (Settings → Collaborators).
+Live at **https://mbalomarr.github.io/ESPORTCLUB/**
+
+- `next.config.mjs` uses `output: "export"`, `basePath: "/ESPORTCLUB"`, `trailingSlash: true` and
+  unoptimized images, so `npm run build` produces a fully static site in `./out`.
+- `.github/workflows/deploy.yml` builds and publishes `./out` on every push to `main`, including JSON edits
+  made in the GitHub web editor (live about 2 minutes later; progress shows in the **Actions** tab).
+- **One-time setup:** repo **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+- Site-relative image paths in `/data` (e.g. `/roster/ahmed.jpg`) get the base path added automatically
+  by `asset()` in `lib/utils.ts`. If the repo is renamed, update `basePath` in `next.config.mjs`.
+- Give the professor **Write** access to the repo (Settings → Collaborators).
 
 ## Forms (no backend)
 
@@ -71,4 +77,4 @@ Alternatively set `googleFormEmbedUrl` to embed a Google Form instead.
 
 > Voting note: with no database, duplicate votes are prevented per browser (localStorage) and every
 > vote lands in the Formspree inbox. Admins copy official totals into `games.json`. For real-time
-> shared tallies later, add a small key-value store (e.g. Upstash Redis via the Vercel Marketplace).
+> shared tallies later, add a small key-value store (e.g. a hosted service such as Supabase or Firebase, called from the browser).

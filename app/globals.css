@@ -103,6 +103,11 @@ html[lang="ar"] {
   --font-display: var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
 }
+/* Set by the boot script in app/layout.tsx while a saved Arabic preference is applied. */
+html[data-lang-pending] body {
+  visibility: hidden;
+}
+
 html[lang="ar"] body * {
   letter-spacing: normal !important;
 }
