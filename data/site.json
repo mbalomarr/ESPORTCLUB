@@ -1,0 +1,52 @@
+{
+  "clubName": { "en": "PMU E-Sports Club", "ar": "نادي PMU للرياضات الإلكترونية" },
+  "university": { "en": "Prince Mohammad bin Fahd University", "ar": "جامعة الأمير محمد بن فهد" },
+  "tagline": { "en": "Forge your legend. Compete for PMU.", "ar": "اصنع أسطورتك. نافس باسم PMU." },
+  "logo": "/logo.png",
+  "contactEmail": "esports@pmu.edu.sa",
+  "about": {
+    "vision": {
+      "en": "To build the leading collegiate e-sports community in the Eastern Province, where students compete at the highest level, develop leadership and teamwork skills, and represent PMU on regional and international stages.",
+      "ar": "أن نبني المجتمع الجامعي الرائد للرياضات الإلكترونية في المنطقة الشرقية، حيث يتنافس الطلاب على أعلى المستويات، ويطوّرون مهارات القيادة والعمل الجماعي، ويمثّلون جامعة الأمير محمد بن فهد على المنصات الإقليمية والدولية."
+    },
+    "pillars": [
+      {
+        "title": { "en": "Compete", "ar": "نافس" },
+        "icon": "swords",
+        "text": { "en": "Varsity rosters, internal leagues and regional collegiate tournaments.", "ar": "فرق تمثّل الجامعة، ودوريات داخلية، وبطولات جامعية إقليمية." }
+      },
+      {
+        "title": { "en": "Community", "ar": "مجتمع" },
+        "icon": "users",
+        "text": { "en": "Weekly game nights, watch parties and a welcoming space for every skill level.", "ar": "أمسيات ألعاب أسبوعية، وحفلات مشاهدة جماعية، ومساحة ترحّب بجميع المستويات." }
+      },
+      {
+        "title": { "en": "Grow", "ar": "تطوّر" },
+        "icon": "target",
+        "text": { "en": "Workshops on casting, streaming, event management and game development.", "ar": "ورش عمل في التعليق، والبث المباشر، وإدارة الفعاليات، وتطوير الألعاب." }
+      }
+    ],
+    "stats": [
+      { "label": { "en": "Active Members", "ar": "عضو نشط" }, "value": "150+" },
+      { "label": { "en": "Tournaments Hosted", "ar": "بطولة نظّمناها" }, "value": "12" },
+      { "label": { "en": "Titles Won", "ar": "لقبًا حققناه" }, "value": "7" },
+      { "label": { "en": "Games Played", "ar": "ألعاب نشارك فيها" }, "value": "8" }
+    ]
+  },
+  "socials": {
+    "discord": "https://discord.gg/your-invite",
+    "twitch": "https://twitch.tv/your-channel",
+    "instagram": "https://instagram.com/pmu_esports",
+    "x": "https://x.com/pmu_esports"
+  },
+  "forms": {
+    "registrationFormspreeId": "",
+    "googleFormEmbedUrl": "",
+    "voteFormspreeId": "",
+    "suggestionFormspreeId": ""
+  },
+  "live": {
+    "twitchChannel": "",
+    "discordServerId": ""
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "name": { "en": "Abdullah Al-Qahtani", "ar": "عبدالله القحطاني" },
+    "role": { "en": "President", "ar": "الرئيس" },
+    "gamertag": "Falcon",
+    "major": { "en": "Computer Engineering", "ar": "هندسة الحاسب" },
+    "mainGame": "Valorant",
+    "photo": "",
+    "socials": { "x": "", "instagram": "", "twitch": "" }
+  },
+  {
+    "name": { "en": "Faisal Al-Dossary", "ar": "فيصل الدوسري" },
+    "role": { "en": "Vice President", "ar": "نائب الرئيس" },
+    "gamertag": "Circuit",
+    "major": { "en": "Software Engineering", "ar": "هندسة البرمجيات" },
+    "mainGame": "Rocket League",
+    "photo": "",
+    "socials": {}
+  },
+  {
+    "name": { "en": "Omar Al-Harbi", "ar": "عمر الحربي" },
+    "role": { "en": "Events Lead", "ar": "مسؤول الفعاليات" },
+    "gamertag": "Nova",
+    "major": { "en": "Business Administration", "ar": "إدارة الأعمال" },
+    "mainGame": "EA Sports FC 26",
+    "photo": "",
+    "socials": {}
+  },
+  {
+    "name": { "en": "Khalid Al-Shehri", "ar": "خالد الشهري" },
+    "role": { "en": "Media & Streaming", "ar": "الإعلام والبث" },
+    "gamertag": "Static",
+    "major": { "en": "Information Technology", "ar": "تقنية المعلومات" },
+    "mainGame": "League of Legends",
+    "photo": "",
+    "socials": {}
+  }
+]

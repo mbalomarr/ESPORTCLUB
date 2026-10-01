@@ -1,0 +1,15 @@
+{
+  "poll": {
+    "id": "next-tournament-2026-q4",
+    "question": { "en": "Which game should headline our next tournament?", "ar": "ما اللعبة التي تريدها في بطولتنا القادمة؟" },
+    "isOpen": true,
+    "closesOn": "2026-11-30"
+  },
+  "options": [
+    { "id": "valorant", "name": "Valorant", "genre": { "en": "Tactical FPS", "ar": "تصويب تكتيكي" }, "votes": 42 },
+    { "id": "fc26", "name": "EA Sports FC 26", "genre": { "en": "Sports", "ar": "رياضة" }, "votes": 37 },
+    { "id": "rocket-league", "name": "Rocket League", "genre": { "en": "Car Soccer", "ar": "كرة قدم بالسيارات" }, "votes": 21 },
+    { "id": "lol", "name": "League of Legends", "genre": { "en": "MOBA", "ar": "ساحة معارك جماعية" }, "votes": 18 },
+    { "id": "tekken8", "name": "Tekken 8", "genre": { "en": "Fighting", "ar": "قتال" }, "votes": 11 }
+  ]
+}

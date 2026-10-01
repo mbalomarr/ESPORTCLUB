@@ -1,0 +1,47 @@
+[
+  {
+    "id": "valorant-fall-cup-2026",
+    "title": { "en": "Valorant Fall Cup", "ar": "كأس الخريف لفالورانت" },
+    "game": "Valorant",
+    "date": "2026-11-12",
+    "time": "18:00",
+    "location": { "en": "PMU Gaming Lab, Building 3", "ar": "مختبر الألعاب، مبنى 3" },
+    "format": { "en": "5v5 · Double Elimination", "ar": "5 ضد 5 · خروج مغلوب مزدوج" },
+    "prize": { "en": "SAR 3,000 + Trophies", "ar": "3,000 ريال + كؤوس" },
+    "status": "upcoming",
+    "description": {
+      "en": "Our flagship fall tournament. Teams of five battle through a double-elimination bracket for the cup.",
+      "ar": "بطولتنا الأبرز لفصل الخريف. فرق من خمسة لاعبين تتنافس في نظام خروج مغلوب مزدوج على الكأس."
+    },
+    "registrationUrl": "/join",
+    "image": ""
+  },
+  {
+    "id": "fc26-showdown",
+    "title": { "en": "EA FC 26 Showdown", "ar": "مواجهة EA FC 26" },
+    "game": "EA Sports FC 26",
+    "date": "2026-10-22",
+    "time": "17:00",
+    "location": { "en": "Student Center Hall", "ar": "قاعة مركز الطلاب" },
+    "format": { "en": "1v1 · Swiss + Playoffs", "ar": "1 ضد 1 · نظام سويسري + أدوار إقصائية" },
+    "prize": { "en": "SAR 1,500", "ar": "1,500 ريال" },
+    "status": "upcoming",
+    "description": { "en": "Bring your best squad. Open to all PMU students.", "ar": "أحضر أفضل تشكيلة لديك. مفتوحة لجميع طلاب الجامعة." },
+    "registrationUrl": "/join",
+    "image": ""
+  },
+  {
+    "id": "rocket-league-3s",
+    "title": { "en": "Rocket League 3v3 Night", "ar": "أمسية روكيت ليغ 3 ضد 3" },
+    "game": "Rocket League",
+    "date": "2026-09-18",
+    "time": "19:00",
+    "location": { "en": "Online", "ar": "عبر الإنترنت" },
+    "format": { "en": "3v3 · Single Elimination", "ar": "3 ضد 3 · خروج مغلوب" },
+    "prize": { "en": "Club Merch", "ar": "منتجات النادي" },
+    "status": "completed",
+    "description": { "en": "A casual-competitive evening of aerials and demos.", "ar": "أمسية تنافسية ممتعة مليئة بالحركات الهوائية." },
+    "registrationUrl": "",
+    "image": ""
+  }
+]
