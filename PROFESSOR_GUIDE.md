@@ -50,7 +50,7 @@ Most text fields hold **two versions** in one pair of curly braces, English firs
 - **Keep the keys `"en"` and `"ar"` exactly as they are** (lowercase, in quotes, in English).
 
 ### Text that's the same in both languages
-Names that don't get translated (game titles, gamertags, team names) can be **plain text**:
+Names that don't get translated (game titles, team names) can be **plain text**:
 
 ```json
 "game": "Valorant",
@@ -117,7 +117,7 @@ Add a block. The **most recent date** automatically becomes the big "Reigning Ch
     "game": "Valorant",
     "date": "2026-12-10",
     "winner": "PMU Falcons",
-    "players": ["Falcon", "Circuit", "Ghost", "Rook", "Blitz"],
+    "players": ["Abdullah", "Faisal", "Hamad", "Rayan", "Turki"],
     "runnerUp": "Team Nova",
     "prize": { "en": "SAR 2,000", "ar": "2,000 ريال" }
   },
@@ -130,7 +130,6 @@ Each member has an English and Arabic name, role and major:
   {
     "name": { "en": "Ahmed Al-Ghamdi", "ar": "أحمد الغامدي" },
     "role": { "en": "Treasurer", "ar": "أمين الصندوق" },
-    "gamertag": "Viper",
     "major": { "en": "Accounting", "ar": "المحاسبة" },
     "mainGame": "Tekken 8",
     "photo": "",

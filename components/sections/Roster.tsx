@@ -38,7 +38,6 @@ export default function Roster({ members }: { members: RosterMember[] }) {
 
                   <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.2em] text-accent-2 rtl:text-sm">{t(m.role)}</p>
                   <h3 className="mt-1 text-lg font-bold text-fg">{name}</h3>
-                  {m.gamertag && <p className="font-display text-sm text-info" dir="ltr">&ldquo;{m.gamertag}&rdquo;</p>}
 
                   <dl className="mt-4 w-full space-y-1.5 border-t border-line pt-4 text-sm text-muted">
                     {m.major && (

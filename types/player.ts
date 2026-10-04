@@ -5,12 +5,12 @@ import type { Socials } from "./site";
 export interface RosterMember {
   name: Localized;
   role: Localized;
-  gamertag?: string;
   major?: Localized;
   mainGame?: Localized;
   /** Site path ("/roster/name.jpg") or full URL. Empty shows initials. */
   photo?: string;
-  socials?: Socials;
+  /** Public profile links. Personal Discord accounts are intentionally not supported. */
+  socials?: Omit<Socials, "discord">;
 }
 
 /** A tournament result shown on the Leaderboard (data/hall-of-fame.json). */

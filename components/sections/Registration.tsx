@@ -97,8 +97,6 @@ function RegistrationForm({ formId, games }: { formId?: string; games: Localized
                 <TextField id="phone" label={d.join.phone} hint={d.common.optional} type="tel" autoComplete="tel" placeholder="05X XXX XXXX" ltr />
                 <TextField id="major" label={d.join.major} required />
                 <SelectField id="year" label={d.join.year} placeholder={d.join.select} options={toChoices(formOptions.years, lang)} required />
-                <TextField id="discord" label={d.join.discord} hint={d.common.optional} placeholder="falcon_pmu" ltr />
-                <TextField id="gamertag" label={d.join.gamertag} hint={d.common.optional} ltr />
               </div>
             </FormSection>
 
