@@ -1,13 +1,18 @@
 {
   "name": "pmu-esports-club",
   "version": "1.0.0",
+  "description": "Official website of the PMU E-Sports Club at Prince Mohammad bin Fahd University",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "next dev",
-    "validate": "node scripts/validate-data.mjs",
-    "prebuild": "node scripts/validate-data.mjs",
     "build": "next build",
-    "start": "next start"
+    "prebuild": "npm run validate",
+    "validate": "node scripts/validate-data.mjs",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run validate && npm run typecheck"
   },
   "dependencies": {
     "framer-motion": "^12.23.0",
@@ -24,8 +29,5 @@
     "@types/react-dom": "^19.1.0",
     "tailwindcss": "^4.1.0",
     "typescript": "^5.9.0"
-  },
-  "engines": {
-    "node": ">=20"
   }
 }
