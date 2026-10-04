@@ -2,17 +2,14 @@
 
 import Link from "next/link";
 import { Mail } from "lucide-react";
-import type { SiteConfig } from "@/lib/types";
+import type { SiteConfig } from "@/types";
 import Logo from "@/components/ui/Logo";
 import SocialLinks from "@/components/ui/SocialLinks";
 import { useLang } from "@/components/providers/LanguageProvider";
+import { joinRoute, mainRoutes } from "@/lib/navigation";
 
-const links = [
-  { href: "/events", key: "events" },
-  { href: "/leaderboard", key: "leaderboard" },
-  { href: "/about", key: "about" },
-  { href: "/join", key: "join" },
-] as const;
+// Every page except Home (the navbar logo links there).
+const links = [...mainRoutes.filter((r) => r.href !== "/"), joinRoute];
 
 export default function Footer({ site }: { site: SiteConfig }) {
   const { d, t } = useLang();

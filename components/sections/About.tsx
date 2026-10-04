@@ -3,12 +3,14 @@
 import { Gamepad2, Sparkles, Swords, Target, Trophy, Users, Zap, type LucideIcon } from "lucide-react";
 import SectionHeading, { type HeadingLevel } from "@/components/ui/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
+import IconTile from "@/components/ui/IconTile";
+import { Card } from "@/components/ui/Card";
 import { useLang } from "@/components/providers/LanguageProvider";
-import { StatsStrip } from "./HomeOverview";
-import type { SiteConfig } from "@/lib/types";
+import type { PillarIcon, SiteConfig } from "@/types";
+import StatsStrip from "./StatsStrip";
 
-// Icons the professor can reference by name in data/site.json → about.pillars[].icon
-const icons: Record<string, LucideIcon> = {
+// Exhaustive over PillarIcon, so adding an icon name to the type forces a mapping here.
+const icons: Record<PillarIcon, LucideIcon> = {
   swords: Swords,
   users: Users,
   target: Target,
@@ -27,8 +29,10 @@ export default function About({ about, headingLevel }: { about: SiteConfig["abou
       <div className="mx-auto max-w-7xl">
         <SectionHeading id="about-title" as={headingLevel} eyebrow={d.about.eyebrow} title={d.about.title} />
 
-        <Reveal className="panel clip-chamfer mx-auto max-w-4xl p-8 text-center sm:p-10">
-          <p className="text-lg leading-relaxed text-fg-soft sm:text-xl rtl:leading-loose">{t(about.vision)}</p>
+        <Reveal>
+          <Card chamfer className="mx-auto max-w-4xl p-8 text-center sm:p-10">
+            <p className="text-lg leading-relaxed text-fg-soft sm:text-xl rtl:leading-loose">{t(about.vision)}</p>
+          </Card>
         </Reveal>
 
         <div className="mt-12 grid gap-5 md:grid-cols-3">
@@ -36,19 +40,19 @@ export default function About({ about, headingLevel }: { about: SiteConfig["abou
             const Icon = icons[p.icon] ?? Sparkles;
             return (
               <Reveal key={i} delay={i * 0.1}>
-                <article className="panel panel-hover h-full p-6">
-                  <span className="mb-5 grid size-12 place-items-center rounded-lg border border-copper-500/40 bg-copper-500/10 text-accent">
+                <Card as="article" hover className="h-full p-6">
+                  <IconTile className="mb-5">
                     <Icon className="size-6" aria-hidden />
-                  </span>
+                  </IconTile>
                   <h3 className="font-display text-lg font-bold uppercase tracking-wide text-fg">{t(p.title)}</h3>
                   <p className="mt-2 text-muted">{t(p.text)}</p>
-                </article>
+                </Card>
               </Reveal>
             );
           })}
         </div>
 
-        <StatsStrip stats={about.stats} t={t} />
+        <StatsStrip stats={about.stats} />
       </div>
     </section>
   );

@@ -4,8 +4,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, CalendarDays, ChevronDown } from "lucide-react";
 import Logo from "@/components/ui/Logo";
+import { ButtonLink } from "@/components/ui/Button";
+import { cardClass } from "@/components/ui/Card";
 import { useLang } from "@/components/providers/LanguageProvider";
-import type { ClubEvent, SiteConfig } from "@/lib/types";
+import type { ClubEvent, SiteConfig } from "@/types";
 
 const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const lineStyles = ["text-gradient-steel", "text-gradient-copper", "text-gradient-steel"];
@@ -64,17 +66,17 @@ export default function Hero({ site, nextEvent }: { site: SiteConfig; nextEvent?
             transition={{ duration: 0.6, delay: 0.4, ease }}
             className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start"
           >
-            <Link href="/join" className="btn btn-primary clip-chamfer w-full sm:w-auto">
+            <ButtonLink href="/join" fullWidth className="sm:w-auto">
               {d.hero.ctaJoin} <ArrowRight className="size-4 rtl:-scale-x-100" aria-hidden />
-            </Link>
-            <Link href="/events" className="btn btn-ghost clip-chamfer w-full sm:w-auto">
+            </ButtonLink>
+            <ButtonLink href="/events" variant="ghost" fullWidth className="sm:w-auto">
               {d.hero.ctaEvents}
-            </Link>
+            </ButtonLink>
           </motion.div>
 
           {nextEvent && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}>
-              <Link href="/events" className="panel panel-hover mt-10 inline-flex items-center gap-4 px-4 py-3 text-start">
+              <Link href="/events" className={cardClass({ hover: true, className: "mt-10 inline-flex items-center gap-4 px-4 py-3 text-start" })}>
                 <span className="grid size-10 place-items-center rounded-md bg-copper-500/15 text-accent">
                   <CalendarDays className="size-5" aria-hidden />
                 </span>

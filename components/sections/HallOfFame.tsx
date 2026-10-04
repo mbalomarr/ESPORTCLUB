@@ -3,8 +3,9 @@
 import { Crown, Medal, Trophy } from "lucide-react";
 import SectionHeading, { type HeadingLevel } from "@/components/ui/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
+import { Card } from "@/components/ui/Card";
 import { useLang } from "@/components/providers/LanguageProvider";
-import type { HallOfFameEntry } from "@/lib/types";
+import type { HallOfFameEntry } from "@/types";
 
 export default function HallOfFame({ entries, headingLevel }: { entries: HallOfFameEntry[]; headingLevel?: HeadingLevel }) {
   const { d, t, date } = useLang();
@@ -17,11 +18,12 @@ export default function HallOfFame({ entries, headingLevel }: { entries: HallOfF
         <SectionHeading id="hof-title" as={headingLevel} eyebrow={d.hof.eyebrow} title={d.hof.title} description={d.hof.description} />
 
         {!latest ? (
-          <p className="panel mx-auto max-w-md p-8 text-center text-muted">{d.hof.empty}</p>
+          <Card className="mx-auto max-w-md p-8 text-center text-muted">{d.hof.empty}</Card>
         ) : (
           <>
             {/* Spotlight: most recent champion */}
-            <Reveal className="panel clip-chamfer glow-copper relative mx-auto mb-10 max-w-4xl overflow-hidden p-6 sm:p-10">
+            <Reveal>
+              <Card chamfer className="glow-copper relative mx-auto mb-10 max-w-4xl overflow-hidden p-6 sm:p-10">
               <div aria-hidden className="bg-circuit absolute inset-0 opacity-60" />
               <div className="relative flex flex-col items-center gap-6 text-center sm:flex-row sm:text-start">
                 <div className="grid size-24 shrink-0 place-items-center rounded-full border-2 border-ember-500/70 bg-gradient-to-br from-copper-400/30 to-transparent shadow-[0_0_40px_-6px_rgb(242_118_43/0.7)]">
@@ -48,11 +50,12 @@ export default function HallOfFame({ entries, headingLevel }: { entries: HallOfF
                   </div>
                 )}
               </div>
+              </Card>
             </Reveal>
 
             {rest.length > 0 && (
               <Reveal>
-                <div className="panel overflow-hidden">
+                <Card className="overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full min-w-[640px] text-start text-sm">
                       <caption className="sr-only">{d.hof.caption}</caption>
@@ -88,7 +91,7 @@ export default function HallOfFame({ entries, headingLevel }: { entries: HallOfF
                       </tbody>
                     </table>
                   </div>
-                </div>
+                </Card>
               </Reveal>
             )}
           </>

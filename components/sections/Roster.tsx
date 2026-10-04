@@ -4,9 +4,11 @@ import { Gamepad2, GraduationCap } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
 import SocialLinks from "@/components/ui/SocialLinks";
+import { Card } from "@/components/ui/Card";
 import { useLang } from "@/components/providers/LanguageProvider";
-import type { RosterMember } from "@/lib/types";
-import { asset, initials, pick } from "@/lib/utils";
+import type { RosterMember } from "@/types";
+import { pick } from "@/lib/i18n/localize";
+import { asset, initials } from "@/lib/utils";
 
 export default function Roster({ members }: { members: RosterMember[] }) {
   const { d, t } = useLang();
@@ -21,11 +23,10 @@ export default function Roster({ members }: { members: RosterMember[] }) {
             const name = t(m.name);
             return (
               <Reveal key={i} delay={(i % 4) * 0.08}>
-                <article className="panel panel-hover clip-chamfer group flex h-full flex-col items-center p-6 text-center">
+                <Card as="article" hover chamfer className="group flex h-full flex-col items-center p-6 text-center">
                   <div className="relative mb-5">
                     <div aria-hidden className="absolute -inset-1.5 rounded-full bg-gradient-to-br from-copper-400 via-steel-500 to-navy-700 opacity-70 blur-[2px] transition-opacity group-hover:opacity-100" />
                     {m.photo ? (
-                      // eslint-disable-next-line @next/next/no-img-element
                       <img src={asset(m.photo)} alt={d.roster.photoOf(name)} loading="lazy" className="relative size-28 rounded-full border-4 border-elevated object-cover" />
                     ) : (
                       <div className="relative grid size-28 place-items-center rounded-full border-4 border-elevated bg-gradient-to-br from-steel-600 to-navy-800 font-display text-3xl font-black text-silver-50">
@@ -55,7 +56,7 @@ export default function Roster({ members }: { members: RosterMember[] }) {
                   </dl>
 
                   <SocialLinks socials={m.socials} size="sm" className="mt-4" />
-                </article>
+                </Card>
               </Reveal>
             );
           })}

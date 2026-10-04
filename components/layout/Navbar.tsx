@@ -3,20 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Logo from "@/components/ui/Logo";
+import { ButtonLink } from "@/components/ui/Button";
 import { useLang } from "@/components/providers/LanguageProvider";
-import LanguageToggle from "./LanguageToggle";
-import ThemeToggle from "./ThemeToggle";
+import { isActiveRoute, joinRoute, mainRoutes } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
-
-const routes = [
-  { href: "/", key: "home" },
-  { href: "/events", key: "events" },
-  { href: "/leaderboard", key: "leaderboard" },
-  { href: "/about", key: "about" },
-] as const;
+import LangToggle from "./LangToggle";
+import ThemeToggle from "./ThemeToggle";
+import MobileNav, { MOBILE_NAV_ID } from "./MobileNav";
 
 export default function Navbar({ logo }: { logo: string }) {
   const { d } = useLang();
@@ -40,8 +36,6 @@ export default function Navbar({ logo }: { logo: string }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
-
   return (
     <header
       className={cn(
@@ -58,21 +52,21 @@ export default function Navbar({ logo }: { logo: string }) {
         </Link>
 
         <ul className="hidden items-center gap-1 lg:flex">
-          {routes.map((r) => {
-            const active = isActive(r.href);
+          {mainRoutes.map((r) => {
+            const active = isActiveRoute(pathname, r.href);
             return (
               <li key={r.href}>
                 <Link
                   href={r.href}
                   aria-current={active ? "page" : undefined}
-                  className={cn(
-                    "relative rounded px-3 py-2 text-sm font-medium transition-colors",
-                    active ? "text-accent" : "text-muted hover:text-accent",
-                  )}
+                  className={cn("relative rounded px-3 py-2 text-sm font-medium transition-colors", active ? "text-accent" : "text-muted hover:text-accent")}
                 >
                   {d.nav[r.key]}
                   {active && (
-                    <motion.span layoutId="nav-underline" className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-copper-400 to-ember-500" />
+                    <motion.span
+                      layoutId="nav-underline"
+                      className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-copper-400 to-ember-500"
+                    />
                   )}
                 </Link>
               </li>
@@ -81,16 +75,16 @@ export default function Navbar({ logo }: { logo: string }) {
         </ul>
 
         <div className="flex shrink-0 items-center gap-2">
-          <LanguageToggle />
+          <LangToggle />
           <ThemeToggle />
-          <Link href="/join" className="btn btn-primary clip-chamfer hidden min-h-10! px-4! py-2! md:inline-flex">
-            {d.nav.join}
-          </Link>
+          <ButtonLink href={joinRoute.href} size="sm" className="hidden md:inline-flex">
+            {d.nav[joinRoute.key]}
+          </ButtonLink>
           <button
             type="button"
             className="grid size-10 place-items-center rounded text-fg lg:hidden"
             aria-expanded={open}
-            aria-controls="mobile-menu"
+            aria-controls={MOBILE_NAV_ID}
             aria-label={open ? d.nav.closeMenu : d.nav.openMenu}
             onClick={() => setOpen((o) => !o)}
           >
@@ -99,37 +93,7 @@ export default function Navbar({ logo }: { logo: string }) {
         </div>
       </nav>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            id="mobile-menu"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-line lg:hidden"
-          >
-            <ul className="space-y-1 px-4 py-4">
-              {[...routes, { href: "/join", key: "join" } as const].map((r) => {
-                const active = isActive(r.href);
-                return (
-                  <li key={r.href}>
-                    <Link
-                      href={r.href}
-                      aria-current={active ? "page" : undefined}
-                      className={cn(
-                        "block rounded-md border-s-2 px-3 py-3 font-display text-sm uppercase tracking-wider transition-colors",
-                        active ? "border-copper-400 bg-elevated-2 text-accent" : "border-transparent text-fg-soft hover:bg-elevated-2 hover:text-accent",
-                      )}
-                    >
-                      {d.nav[r.key]}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <MobileNav open={open} pathname={pathname} />
     </header>
   );
 }

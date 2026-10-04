@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { ButtonLink } from "@/components/ui/Button";
 import { useLang } from "@/components/providers/LanguageProvider";
 
 export default function NotFoundContent() {
@@ -10,7 +10,9 @@ export default function NotFoundContent() {
       <div>
         <p className="font-display text-7xl font-black text-gradient-copper" dir="ltr">404</p>
         <h1 className="mt-4 font-display text-xl text-fg">{d.notFound.title}</h1>
-        <Link href="/" className="btn btn-primary clip-chamfer mt-8">{d.notFound.back}</Link>
+        <ButtonLink href="/" className="mt-8">
+          {d.notFound.back}
+        </ButtonLink>
       </div>
     </section>
   );

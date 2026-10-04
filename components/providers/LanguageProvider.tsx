@@ -2,23 +2,23 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
-import type { Lang, Localized } from "@/lib/types";
-import { dictionaries, LANG_STORAGE_KEY, type Dictionary } from "@/lib/i18n/dictionary";
-import { formatDate, pick } from "@/lib/utils";
+import type { IsoDate, Lang, Localized } from "@/types";
+import { dictionaries, type Dictionary } from "@/lib/i18n/dictionary";
+import { directionOf, formatDate, LANG_STORAGE_KEY, pick } from "@/lib/i18n/localize";
 
 interface LanguageContextValue {
   lang: Lang;
-  dir: "ltr" | "rtl";
+  /** UI strings for the active language. */
   d: Dictionary;
   setLang: (lang: Lang) => void;
   /** Resolve a Localized value from /data into the active language. */
   t: (value: Localized | undefined) => string;
-  date: (iso: string, opts?: Intl.DateTimeFormatOptions) => string;
+  date: (iso: IsoDate, opts?: Intl.DateTimeFormatOptions) => string;
 }
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-const pageTitleKey: Record<string, keyof Dictionary["meta"]> = {
+const pageTitleKey: Partial<Record<string, keyof Dictionary["meta"]>> = {
   "/events": "events",
   "/about": "about",
   "/leaderboard": "leaderboard",
@@ -28,7 +28,7 @@ const pageTitleKey: Record<string, keyof Dictionary["meta"]> = {
 function applyToDocument(lang: Lang) {
   const html = document.documentElement;
   html.lang = lang;
-  html.dir = lang === "ar" ? "rtl" : "ltr";
+  html.dir = directionOf(lang);
   html.removeAttribute("data-lang-pending");
 }
 
@@ -74,7 +74,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo<LanguageContextValue>(
     () => ({
       lang,
-      dir: lang === "ar" ? "rtl" : "ltr",
       d: dictionaries[lang],
       setLang,
       t: (v) => pick(v, lang),

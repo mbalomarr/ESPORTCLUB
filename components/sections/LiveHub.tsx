@@ -6,8 +6,10 @@ import { ExternalLink, Radio, Tv } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
 import { DiscordIcon, TwitchIcon } from "@/components/ui/BrandIcons";
+import { ButtonLink } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { useLang } from "@/components/providers/LanguageProvider";
-import type { SiteConfig, Socials } from "@/lib/types";
+import type { SiteConfig, Socials } from "@/types";
 
 export default function LiveHub({ live, socials }: { live: SiteConfig["live"]; socials: Socials }) {
   const { d } = useLang();
@@ -27,7 +29,8 @@ export default function LiveHub({ live, socials }: { live: SiteConfig["live"]; s
         <SectionHeading id="live-title" eyebrow={d.live.eyebrow} title={d.live.title} description={d.live.description} />
 
         <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-          <Reveal className="panel clip-chamfer overflow-hidden">
+          <Reveal>
+            <Card chamfer className="overflow-hidden">
             <div className="flex items-center justify-between border-b border-line px-5 py-3">
               <p className="flex items-center gap-2 font-display text-xs font-bold uppercase tracking-widest text-fg rtl:text-sm">
                 <TwitchIcon className="size-4 text-[#9146ff]" />
@@ -57,9 +60,11 @@ export default function LiveHub({ live, socials }: { live: SiteConfig["live"]; s
                 {d.live.openTwitch} <ExternalLink className="size-3.5" aria-hidden />
               </a>
             )}
+            </Card>
           </Reveal>
 
-          <Reveal delay={0.1} className="panel clip-chamfer flex flex-col overflow-hidden">
+          <Reveal delay={0.1}>
+            <Card chamfer className="flex h-full flex-col overflow-hidden">
             <div className="flex items-center border-b border-line px-5 py-3">
               <p className="flex items-center gap-2 font-display text-xs font-bold uppercase tracking-widest text-fg rtl:text-sm">
                 <DiscordIcon className="size-4 text-[#5865f2]" />
@@ -81,10 +86,11 @@ export default function LiveHub({ live, socials }: { live: SiteConfig["live"]; s
               )}
             </div>
             {socials.discord && (
-              <a href={socials.discord} target="_blank" rel="noopener noreferrer" className="btn btn-primary m-4">
+              <ButtonLink href={socials.discord} chamfer={false} className="m-4">
                 {d.live.joinDiscord}
-              </a>
+              </ButtonLink>
             )}
+            </Card>
           </Reveal>
         </div>
       </div>

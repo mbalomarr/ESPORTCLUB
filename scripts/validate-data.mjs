@@ -7,6 +7,8 @@ import { readFileSync } from "node:fs";
 const errors = [];
 const warnings = [];
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
+// Keep in sync with PILLAR_ICONS in types/site.ts.
+const PILLAR_ICONS = ["swords", "users", "target", "trophy", "gamepad", "zap", "sparkles"];
 
 function load(file) {
   try {
@@ -59,8 +61,10 @@ if (site) {
   ["clubName", "university", "tagline"].forEach((f) => text(site, f, w));
   text(site.about, "vision", `${w} about`);
   (site.about?.pillars ?? []).forEach((p, i) => {
-    text(p, "title", `${w} about.pillars #${i + 1}`);
-    text(p, "text", `${w} about.pillars #${i + 1}`);
+    const where = `${w} about.pillars #${i + 1}`;
+    text(p, "title", where);
+    text(p, "text", where);
+    if (!PILLAR_ICONS.includes(p?.icon)) errors.push(`${where}: icon must be one of ${PILLAR_ICONS.join(", ")}`);
   });
   (site.about?.stats ?? []).forEach((s, i) => {
     text(s, "label", `${w} about.stats #${i + 1}`);

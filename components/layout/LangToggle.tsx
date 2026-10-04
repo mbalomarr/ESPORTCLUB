@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useLang } from "@/components/providers/LanguageProvider";
-import type { Lang } from "@/lib/types";
+import type { Lang } from "@/types";
 import { cn } from "@/lib/utils";
 
 const options: { value: Lang; label: string }[] = [
@@ -11,7 +11,7 @@ const options: { value: Lang; label: string }[] = [
 ];
 
 /** Segmented EN / ع switch. The whole control toggles, so one tap always switches. */
-export default function LanguageToggle() {
+export default function LangToggle() {
   const { lang, setLang, d } = useLang();
   const next: Lang = lang === "en" ? "ar" : "en";
 

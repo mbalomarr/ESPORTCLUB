@@ -1,10 +1,9 @@
-import { events, site } from "@/lib/content";
+import { nextEvent, site } from "@/lib/content";
 import Hero from "@/components/sections/Hero";
 import HomeOverview from "@/components/sections/HomeOverview";
 import LiveHub from "@/components/sections/LiveHub";
 
 export default function HomePage() {
-  const nextEvent = events.find((e) => e.status !== "completed");
   return (
     <>
       <Hero site={site} nextEvent={nextEvent} />

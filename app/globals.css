@@ -142,9 +142,6 @@ body {
 @utility glow-copper {
   box-shadow: 0 0 0 1px rgb(214 138 82 / 0.45), 0 0 24px -4px rgb(242 118 43 / 0.5);
 }
-@utility glow-steel {
-  box-shadow: 0 0 0 1px rgb(127 166 204 / 0.3), 0 0 32px -8px rgb(86 131 176 / 0.6);
-}
 /* Decorative background blobs: full strength in dark, softened in light. */
 @utility glow-blob {
   opacity: var(--glow-opacity);

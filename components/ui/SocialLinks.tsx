@@ -1,4 +1,4 @@
-import type { Socials } from "@/lib/types";
+import type { Socials } from "@/types";
 import { DiscordIcon, InstagramIcon, TwitchIcon, XIcon } from "./BrandIcons";
 import { cn } from "@/lib/utils";
 
