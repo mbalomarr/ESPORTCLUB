@@ -1,11 +1,11 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { CheckCircle2, Loader2, Rocket, ShieldCheck } from "lucide-react";
+import { Loader2, Rocket, ShieldCheck } from "lucide-react";
 import SectionHeading, { type HeadingLevel } from "@/components/ui/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import Toast from "@/components/ui/Toast";
 import { ChipGroup, FormError, FormSection, Honeypot, RadioCards, SelectField, TextAreaField, TextField, type Choice } from "@/components/ui/Form";
 import { useLang } from "@/components/providers/LanguageProvider";
 import { formOptions, type ChoiceOption } from "@/lib/i18n/form-options";
@@ -67,68 +67,55 @@ function RegistrationForm({ formId, games }: { formId?: string; games: Localized
     const ok = await run(() =>
       submitToFormspree(formId, { _subject: `New member: ${data.fullName}`, form: "registration", language: lang, ...data }),
     );
+    // The form stays on screen for the next registration; clear it and confirm with a toast.
     if (ok) form.reset();
   }
 
   return (
     <Card chamfer className="relative overflow-hidden p-5 sm:p-10">
       <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-copper-400 to-transparent" />
-      <AnimatePresence mode="wait">
-        {status === "sent" ? (
-          <motion.div key="done" role="status" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="py-12 text-center">
-            <div className="glow-copper mx-auto mb-6 grid size-20 place-items-center rounded-full border-2 border-copper-400 bg-copper-500/10">
-              <CheckCircle2 className="size-10 text-accent" aria-hidden />
-            </div>
-            <h2 className="font-display text-2xl font-black uppercase text-gradient-copper">{d.join.successTitle}</h2>
-            <p className="mx-auto mt-3 max-w-md text-muted">{d.join.successText}</p>
-            <Button variant="ghost" onClick={reset} className="mt-8">
-              {d.join.another}
-            </Button>
-          </motion.div>
-        ) : (
-          <motion.form key="form" onSubmit={onSubmit} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
-            <Honeypot />
+      <form onSubmit={onSubmit} className="space-y-8">
+        <Honeypot />
 
-            <FormSection legend={d.join.sections.info}>
-              <div className="grid gap-5 sm:grid-cols-2">
-                <TextField id="fullName" label={d.join.fullName} required autoComplete="name" />
-                <TextField id="studentId" label={d.join.studentId} required inputMode="numeric" pattern="[0-9]{6,12}" title={d.join.digitsOnly} ltr />
-                <TextField id="email" label={d.join.email} type="email" required autoComplete="email" placeholder="you@pmu.edu.sa" ltr />
-                <TextField id="phone" label={d.join.phone} hint={d.common.optional} type="tel" autoComplete="tel" placeholder="05X XXX XXXX" ltr />
-                <TextField id="major" label={d.join.major} required />
-                <SelectField id="year" label={d.join.year} placeholder={d.join.select} options={toChoices(formOptions.years, lang)} required />
-              </div>
-            </FormSection>
+        <FormSection legend={d.join.sections.info}>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <TextField id="fullName" label={d.join.fullName} required autoComplete="name" />
+            <TextField id="studentId" label={d.join.studentId} required inputMode="numeric" pattern="[0-9]{6,12}" title={d.join.digitsOnly} ltr />
+            <TextField id="email" label={d.join.email} type="email" required autoComplete="email" placeholder="you@pmu.edu.sa" ltr />
+            <TextField id="phone" label={d.join.phone} hint={d.common.optional} type="tel" autoComplete="tel" placeholder="05X XXX XXXX" ltr />
+            <TextField id="major" label={d.join.major} required />
+            <SelectField id="year" label={d.join.year} placeholder={d.join.select} options={toChoices(formOptions.years, lang)} required />
+          </div>
+        </FormSection>
 
-            <FormSection legend={d.join.sections.game}>
-              <ChipGroup name="games" label={d.join.games} options={gameChoices} />
-              <ChipGroup name="platforms" label={d.join.platforms} options={toChoices(formOptions.platforms, lang)} />
-              <RadioCards name="skillLevel" label={d.join.skill} options={levelChoices} />
-            </FormSection>
+        <FormSection legend={d.join.sections.game}>
+          <ChipGroup name="games" label={d.join.games} options={gameChoices} />
+          <ChipGroup name="platforms" label={d.join.platforms} options={toChoices(formOptions.platforms, lang)} />
+          <RadioCards name="skillLevel" label={d.join.skill} options={levelChoices} />
+        </FormSection>
 
-            <FormSection legend={d.join.sections.contribute}>
-              <ChipGroup name="roles" label={d.join.roles} options={toChoices(formOptions.roles, lang)} />
-              <TextAreaField id="message" label={d.join.message} hint={d.common.optional} maxLength={800} placeholder={d.join.messagePlaceholder} />
-            </FormSection>
+        <FormSection legend={d.join.sections.contribute}>
+          <ChipGroup name="roles" label={d.join.roles} options={toChoices(formOptions.roles, lang)} />
+          <TextAreaField id="message" label={d.join.message} hint={d.common.optional} maxLength={800} placeholder={d.join.messagePlaceholder} />
+        </FormSection>
 
-            <label className="flex items-start gap-3 text-sm text-muted">
-              <input type="checkbox" name="consent" value="yes" required className="mt-0.5 size-5 shrink-0 accent-copper-500" />
-              <span>{d.join.consent}</span>
-            </label>
+        <label className="flex items-start gap-3 text-sm text-muted">
+          <input type="checkbox" name="consent" value="yes" required className="mt-0.5 size-5 shrink-0 accent-copper-500" />
+          <span>{d.join.consent}</span>
+        </label>
 
-            <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
-              <p className="flex items-center gap-2 text-xs text-muted">
-                <ShieldCheck className="size-4 shrink-0 text-steel-500" aria-hidden /> {d.join.privacy}
-              </p>
-              <Button type="submit" disabled={isSending} fullWidth className="sm:w-auto">
-                {isSending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <Rocket className="size-4 rtl:-scale-x-100" aria-hidden />}
-                {isSending ? d.join.submitting : d.join.submit}
-              </Button>
-            </div>
-            <FormError message={error} className="text-center" />
-          </motion.form>
-        )}
-      </AnimatePresence>
+        <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
+          <p className="flex items-center gap-2 text-xs text-muted">
+            <ShieldCheck className="size-4 shrink-0 text-steel-500" aria-hidden /> {d.join.privacy}
+          </p>
+          <Button type="submit" disabled={isSending} fullWidth className="sm:w-auto">
+            {isSending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <Rocket className="size-4 rtl:-scale-x-100" aria-hidden />}
+            {isSending ? d.join.submitting : d.join.submit}
+          </Button>
+        </div>
+        <FormError message={error} className="text-center" />
+      </form>
+      <Toast open={status === "sent"} message={d.join.success} closeLabel={d.common.close} onClose={reset} />
     </Card>
   );
 }
