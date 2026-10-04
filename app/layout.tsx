@@ -20,7 +20,8 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://mbalomarr.github.io"),
   title: { default: d.meta.siteName, template: `%s | ${d.meta.siteName}` },
   description: d.meta.description,
-  openGraph: { title: d.meta.siteName, description: d.meta.description, images: [`${basePath}${site.logo}`] },
+  // Share previews use the opaque square logo: chat apps render transparent corners unpredictably (often black).
+  openGraph: { title: d.meta.siteName, description: d.meta.description, images: [`${basePath}/logo.png`] },
 };
 
 export const viewport: Viewport = {

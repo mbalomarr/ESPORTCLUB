@@ -24,7 +24,8 @@ Requires Node.js 20+.
 │   ├── join/page.tsx          # /join         Registration form
 │   ├── not-found.tsx
 │   ├── globals.css            # Tailwind v4 theme: brand palette, light/dark tokens, RTL rules
-│   └── icon.png
+│   ├── icon.png               # Favicon (transparent, 256px)
+│   └── apple-icon.png         # iOS home-screen icon (on navy, 180px)
 ├── components/
 │   ├── ui/                    # Atomic primitives, no app state
 │   │   ├── Button.tsx         #   Button, ButtonLink (internal → <Link>, external → new tab)
@@ -46,7 +47,7 @@ Requires Node.js 20+.
 │   └── utils.ts               # cn(), asset() (basePath for images), initials()
 ├── types/                     # Entity types: i18n, event, player, game, site (barrel: "@/types")
 ├── data/                      # ← THE CMS (bilingual JSON). Edit these on GitHub.
-├── public/                    # logo.png, roster/ photos, games/ images, .nojekyll
+├── public/                    # logo-transparent.png (UI), logo.png (share previews), roster/, games/, .nojekyll
 ├── scripts/validate-data.mjs  # Content schema check; runs before every build
 ├── .github/workflows/deploy.yml
 └── PROFESSOR_GUIDE.md

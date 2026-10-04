@@ -2,7 +2,7 @@
   "clubName": { "en": "PMU E-Sports Club", "ar": "نادي PMU للرياضات الإلكترونية" },
   "university": { "en": "Prince Mohammad bin Fahd University", "ar": "جامعة الأمير محمد بن فهد" },
   "tagline": { "en": "Forge your legend. Compete for PMU.", "ar": "اصنع أسطورتك. نافس باسم PMU." },
-  "logo": "/logo.png",
+  "logo": "/logo-transparent.png",
   "contactEmail": "esports@pmu.edu.sa",
   "about": {
     "vision": {
