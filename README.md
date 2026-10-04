@@ -6,9 +6,7 @@ Next.js 15 (App Router) · Tailwind CSS v4 · Framer Motion · Lucide · next-th
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000/ESPORTCLUB/
-npm run validate   # check /data JSON files
-npm run build      # static export to ./out (runs validate first)
+npm run dev
 ```
 
 Requires Node.js 20+.
@@ -17,32 +15,55 @@ Requires Node.js 20+.
 
 ```
 .
-├── app/
-│   ├── globals.css          # Tailwind v4: brand palette, light/dark semantic tokens, RTL + Arabic font rules
-│   ├── layout.tsx           # Fonts, providers, Navbar/Footer, pre-paint language boot script
-│   ├── page.tsx             # /             Hero + overview + live hub
-│   ├── events/page.tsx      # /events       Events board + game voting
-│   ├── about/page.tsx       # /about        About us + leadership roster
-│   ├── leaderboard/page.tsx # /leaderboard  Hall of Fame
-│   ├── join/page.tsx        # /join         Registration form
+├── app/                       # Routes (App Router, statically exported)
+│   ├── layout.tsx             # Fonts, providers, Navbar/Footer, pre-paint language boot script
+│   ├── page.tsx               # /             Hero, overview, live hub
+│   ├── events/page.tsx        # /events       Events board, game voting
+│   ├── about/page.tsx         # /about        Vision, pillars, stats, leadership roster
+│   ├── leaderboard/page.tsx   # /leaderboard  Hall of Fame
+│   ├── join/page.tsx          # /join         Registration form
 │   ├── not-found.tsx
+│   ├── globals.css            # Tailwind v4 theme: brand palette, light/dark tokens, RTL rules
 │   └── icon.png
 ├── components/
-│   ├── layout/              # Navbar, Footer, LanguageToggle, ThemeToggle, SkipLink
-│   ├── providers/           # Providers (next-themes + language + motion), LanguageProvider (useLang)
-│   ├── sections/            # One component per page section
-│   └── ui/                  # Logo, Reveal, SectionHeading, SocialLinks, BrandIcons
-├── data/                    # ← THE CMS (bilingual). Edit these on GitHub.
+│   ├── ui/                    # Atomic primitives, no app state
+│   │   ├── Button.tsx         #   Button, ButtonLink (internal → <Link>, external → new tab)
+│   │   ├── Card.tsx           #   Card, cardClass()
+│   │   ├── Badge.tsx · IconTile.tsx · Logo.tsx · SocialLinks.tsx · BrandIcons.tsx
+│   │   ├── Form.tsx           #   TextField, TextAreaField, SelectField, ChipGroup, RadioCards, FormSection, …
+│   │   └── Reveal.tsx · SectionHeading.tsx
+│   ├── layout/                # Navbar, MobileNav, Footer, LangToggle, ThemeToggle, SkipLink
+│   ├── sections/              # Page sections (Hero, EventsBoard, EventCard, GameVoting, SuggestGameForm, …)
+│   └── providers/             # Providers (next-themes + language + motion), LanguageProvider / useLang()
 ├── lib/
-│   ├── i18n/dictionary.ts   # UI strings in EN + AR (AR is type-checked against EN)
-│   ├── i18n/server.ts       # getLang() / getDictionary() for server components & metadata
-│   ├── content.ts           # Typed loaders + sorting for /data
-│   ├── types.ts             # Content schema (Localized = string | { en, ar })
-│   └── utils.ts             # cn, pick(), localized dates, Formspree submit
-├── public/                  # logo.png, roster/ photos, games/ images
-├── scripts/validate-data.mjs  # Pre-build content check (protects the live site)
+│   ├── content.ts             # Typed, sorted access to /data (the only module that imports JSON)
+│   ├── navigation.ts          # Route list + active-link helper shared by Navbar, MobileNav, Footer
+│   ├── formspree.ts           # Browser → Formspree submission helpers
+│   ├── hooks/use-form-submission.ts  # Shared idle/sending/sent/error state for every form
+│   ├── i18n/dictionary.ts     # UI strings, EN + AR (AR is type-checked against EN)
+│   ├── i18n/form-options.ts   # Registration choices (English values, localized labels)
+│   ├── i18n/localize.ts       # pick(), formatDate(), direction, storage key
+│   └── utils.ts               # cn(), asset() (basePath for images), initials()
+├── types/                     # Entity types: i18n, event, player, game, site (barrel: "@/types")
+├── data/                      # ← THE CMS (bilingual JSON). Edit these on GitHub.
+├── public/                    # logo.png, roster/ photos, games/ images, .nojekyll
+├── scripts/validate-data.mjs  # Content schema check; runs before every build
+├── .github/workflows/deploy.yml
 └── PROFESSOR_GUIDE.md
 ```
+
+**Dependency direction:** `app` → `components/sections` → `components/ui` + `lib` → `types`.
+UI primitives never read app state; sections get data from pages via props and text via `useLang()`.
+
+## Scripts
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server at http://localhost:3000/ESPORTCLUB/ |
+| `npm run validate` | Check `/data/*.json` against the content schema |
+| `npm run typecheck` | `tsc --noEmit` (strict, no unused locals/params) |
+| `npm run check` | validate + typecheck |
+| `npm run build` | Validate, then static export to `./out` |
 
 ## How i18n and theming work
 
