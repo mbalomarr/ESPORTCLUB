@@ -1,10 +1,10 @@
 # نادي PMU للرياضات الإلكترونية | PMU E-Sports Club
 
 الموقع الرسمي لنادي الرياضات الإلكترونية في جامعة الأمير محمد بن فهد.
-الموقع كله في ملف واحد: **`index.html`**، والصور في مجلد **`assets`**. لا يحتاج إلى أي برنامج أو تثبيت.
+الموقع كله في ملف واحد: **`index.html`**، والصور في مجلد **`assets`**. تسجيلات الطلاب تُحفظ في قاعدة بيانات **SQL Server** على MonsterASP عبر الملف `register.ashx`.
 
 - **النشر على MonsterASP:** راجع ملف [`MONSTERASP_DEPLOYMENT.md`](MONSTERASP_DEPLOYMENT.md)
-- **معاينة مباشرة على الإنترنت:** <https://mbalomarr.github.io/ESPORTCLUB/> (تتحدّث تلقائيًا بعد كل تعديل على GitHub)
+- **معاينة مباشرة على الإنترنت:** <https://mbalomarr.github.io/ESPORTCLUB/> (تتحدّث تلقائيًا بعد كل تعديل على GitHub). ⚠ نموذج التسجيل **لا يعمل** في هذه المعاينة لأنها لا تحتوي على خادم؛ يعمل فقط على MonsterASP.
 
 ---
 
@@ -63,15 +63,18 @@
 - إذا ظهر شيء غريب بعد التعديل: افتح الملف على GitHub ← **History** (أيقونة الساعة) ← اختر النسخة السابقة لاسترجاعها. لا يضيع أي شيء.
 
 ### 📝 التسجيل في النادي
-نموذج «انضم إلى النادي» يرسل الحقول الستة (الاسم، الرقم الجامعي، البريد، الجوال، التخصص، السنة الدراسية) إلى **Formspree** (النموذج `mqparrqb`). تصل التسجيلات إلى بريد Formspree، ولا يحتاج الموقع إلى قاعدة بيانات.
+نموذج «انضم إلى النادي» يرسل الحقول الستة (الاسم، الرقم الجامعي، البريد، الجوال، التخصص، السنة الدراسية) إلى `register.ashx`، الذي يتحقق منها ثم يحفظها في جدول **`ClubMembers`**.
+كل رقم جامعي يُسجَّل مرة واحدة فقط. طريقة إعداد قاعدة البيانات وعرض التسجيلات موجودة في [`MONSTERASP_DEPLOYMENT.md`](MONSTERASP_DEPLOYMENT.md).
 
 ---
 
 ## For developers (English)
 
-- **Stack:** a single static `index.html`. Tailwind CSS v4 runs from a CDN (`@tailwindcss/browser`), fonts come from Google Fonts, and a small inline script at the end of the file handles the EN/AR switch, dark/light theme, mobile menu, event dates, sorting and filters, member initials, and the Formspree submission. No build step, no dependencies.
+- **Stack:** a single static `index.html`. Tailwind CSS v4 runs from a CDN (`@tailwindcss/browser`), fonts come from Google Fonts, and a small inline script at the end of the file handles the EN/AR switch, dark/light theme, mobile menu, event dates, sorting and filters, member initials, and the registration submission. No build step, no dependencies.
+- **Registration backend:** the form POSTs JSON (`fullName`, `studentId`, `email`, `phone`, `major`, `year`) to `register.ashx`, an ASP.NET 4.x generic handler compiled on the fly by IIS (C# 5 syntax, `JavaScriptSerializer`, no NuGet). It validates input server-side, runs a parameterized `INSERT` into `dbo.ClubMembers` (schema in `database_setup.sql`, with a unique `StudentID`) and replies with JSON: `201 {success:true}`, `400 {error:"validation", fields:[…]}`, `409 {error:"duplicate"}`, or `405/413/415/500 {error:"…"}`.
+- **Configuration:** `web.config` holds the `MonsterASP_DB_Connection` connection string as a **placeholder**. Real credentials are entered on the server only and must never be committed. It also sets `index.html` as the default document and blocks `.sql`/`.md` downloads.
 - **Assets:** `assets/` holds the logo (`logo-transparent.png` for the UI, `logo.png` for social previews), `icon.png` / `apple-icon.png`, and `roster/` for member photos. All paths are relative, so the site works from any folder or domain.
 - **Bilingual content:** text is written as `<span class="en">…</span><span class="ar">…</span>`. CSS hides the inactive language based on `<html lang>`. Attributes use `data-label-en/ar`, `data-placeholder-en/ar` and `<option data-en/ar>`.
 - **Preferences:** `localStorage` keys `pmu-lang` and `theme`, applied by an inline script in `<head>` before first paint.
-- **Hosting:** production is MonsterASP (IIS); see `MONSTERASP_DEPLOYMENT.md`. `.github/workflows/deploy.yml` also publishes `index.html` and `assets/` to GitHub Pages as a preview on every push.
+- **Hosting:** production is MonsterASP (IIS, ASP.NET 4.x); see `MONSTERASP_DEPLOYMENT.md`. `.github/workflows/deploy.yml` also publishes `index.html` and `assets/` to GitHub Pages as a static preview on every push (registration can't work there: no server).
 - **Local preview:** open `index.html` directly in a browser, or serve the folder with any static server.

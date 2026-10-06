@@ -558,8 +558,8 @@
     </section>
 
     <!-- ════════════════════════════ JOIN (REGISTRATION) ════════════════════════════
-         Answers are sent to Formspree (form mqparrqb, see the script at the end of this file).
-         The "name" of each field is the label you will see in the Formspree inbox. -->
+         Answers are sent to register.ashx, which saves them in the SQL Server table ClubMembers
+         (see database_setup.sql). The limits on each field match the checks in register.ashx. -->
     <section id="join" class="relative px-4 py-20 sm:px-6">
       <div aria-hidden="true" class="bg-circuit absolute inset-0 -z-10 opacity-50"></div>
       <div class="mx-auto max-w-4xl">
@@ -575,11 +575,11 @@
           <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
 
           <div class="grid gap-5 sm:grid-cols-2">
-            <div><label class="label" for="fullName"><span class="en">Full name</span><span class="ar">الاسم الكامل</span></label><input class="field" id="fullName" name="fullName" required autocomplete="name" /></div>
+            <div><label class="label" for="fullName"><span class="en">Full name</span><span class="ar">الاسم الكامل</span></label><input class="field" id="fullName" name="fullName" required minlength="2" maxlength="100" autocomplete="name" /></div>
             <div><label class="label" for="studentId"><span class="en">University ID</span><span class="ar">الرقم الجامعي</span></label><input class="field" id="studentId" name="studentId" dir="ltr" required inputmode="numeric" pattern="[0-9]{6,12}" /></div>
-            <div><label class="label" for="email"><span class="en">University email</span><span class="ar">البريد الجامعي</span></label><input class="field" id="email" name="email" type="email" dir="ltr" required autocomplete="email" placeholder="you@pmu.edu.sa" /></div>
-            <div><label class="label" for="phone"><span class="en">Phone</span><span class="ar">رقم الجوال</span></label><input class="field" id="phone" name="phone" type="tel" dir="ltr" required autocomplete="tel" placeholder="05X XXX XXXX" /></div>
-            <div><label class="label" for="major"><span class="en">Major</span><span class="ar">التخصص</span></label><input class="field" id="major" name="major" required /></div>
+            <div><label class="label" for="email"><span class="en">University email</span><span class="ar">البريد الجامعي</span></label><input class="field" id="email" name="email" type="email" dir="ltr" required maxlength="254" autocomplete="email" placeholder="you@pmu.edu.sa" /></div>
+            <div><label class="label" for="phone"><span class="en">Phone</span><span class="ar">رقم الجوال</span></label><input class="field" id="phone" name="phone" type="tel" dir="ltr" required pattern="\+?[0-9][0-9 \-]{6,18}" maxlength="20" autocomplete="tel" placeholder="05X XXX XXXX" /></div>
+            <div><label class="label" for="major"><span class="en">Major</span><span class="ar">التخصص</span></label><input class="field" id="major" name="major" required minlength="2" maxlength="100" /></div>
             <div>
               <label class="label" for="year"><span class="en">Study year</span><span class="ar">السنة الدراسية</span></label>
               <select class="field" id="year" name="year" required>
@@ -654,7 +654,7 @@
     (function () {
       "use strict";
 
-      var FORMSPREE_URL = "https://formspree.io/f/mqparrqb";
+      var REGISTER_URL = "./register.ashx"; // C# handler on the same server (MonsterASP)
       var html = document.documentElement;
       var $ = function (sel, root) { return (root || document).querySelector(sel); };
       var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
@@ -854,13 +854,14 @@
         photo.textContent = name.split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join("");
       });
 
-      /* ── Registration form → Formspree ── */
+      /* ── Registration form → register.ashx → SQL Server ── */
       var form = $("#join-form");
       var errorBox = $("#form-error");
       var toast = $("#toast-card");
       var toastTimer;
       var MESSAGES = {
         invalid: { en: "Please fill in all fields correctly.", ar: "يرجى تعبئة جميع الحقول بشكل صحيح." },
+        duplicate: { en: "This University ID is already registered.", ar: "هذا الرقم الجامعي مسجّل مسبقًا." },
         failed: { en: "Something went wrong. Please try again.", ar: "حدث خطأ ما. يرجى المحاولة مرة أخرى." }
       };
 
@@ -892,23 +893,34 @@
           return;
         }
         var data = {};
-        new FormData(form).forEach(function (value, key) { data[key] = value; });
+        new FormData(form).forEach(function (value, key) { data[key] = String(value).trim(); });
         if (data._gotcha) return; // spam bot
-        data._subject = "New member: " + data.fullName;
-        data.language = lang();
 
         setSending(true);
-        fetch(FORMSPREE_URL, {
+        fetch(REGISTER_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify(data)
         })
           .then(function (res) {
-            if (!res.ok) throw new Error("Formspree " + res.status);
-            form.reset();
-            showToast();
+            // The handler always answers in JSON; anything else (e.g. an IIS error page) counts as a failure.
+            return res.json().catch(function () { return {}; }).then(function (body) {
+              return { status: res.status, ok: res.ok && body.success === true, error: body.error };
+            });
           })
-          .catch(function () { errorBox.textContent = MESSAGES.failed[lang()]; })
+          .then(function (result) {
+            if (result.ok) {
+              form.reset();
+              showToast();
+            } else if (result.status === 409 || result.error === "duplicate") {
+              errorBox.textContent = MESSAGES.duplicate[lang()];
+            } else if (result.status === 400 && result.error === "validation") {
+              errorBox.textContent = MESSAGES.invalid[lang()];
+            } else {
+              errorBox.textContent = MESSAGES.failed[lang()];
+            }
+          })
+          .catch(function () { errorBox.textContent = MESSAGES.failed[lang()]; }) // network error
           .then(function () { setSending(false); });
       });
 
