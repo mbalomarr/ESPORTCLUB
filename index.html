@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PMU E-Sports Club</title>
+  <meta name="description" content="The official home of the PMU E-Sports Club at Prince Mohammad bin Fahd University." />
+  <meta name="theme-color" content="#060b18" />
+  <link rel="icon" href="assets/icon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/apple-icon.png" />
+  <meta property="og:title" content="PMU E-Sports Club" />
+  <meta property="og:description" content="The official home of the PMU E-Sports Club at Prince Mohammad bin Fahd University." />
+  <meta property="og:image" content="https://mbalomarr.github.io/ESPORTCLUB/assets/logo.png" />
+
+  <!-- Apply the saved theme and language before anything is drawn (no flash). -->
+  <script>
+    (function () {
+      var html = document.documentElement;
+      html.classList.add("js");
+      try {
+        if (localStorage.getItem("theme") === "light") html.classList.remove("dark");
+        if (localStorage.getItem("pmu-lang") === "ar") { html.lang = "ar"; html.dir = "rtl"; }
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet" />
+
+  <!-- Basic colors before Tailwind loads, so the page never flashes white. -->
+  <style>
+    html.dark body { background: #060b18; color: #dbe4ee; }
+    html:not(.dark) body { background: #f3f6fa; color: #24334f; }
+  </style>
+
+  <!-- Tailwind CSS (no build step needed) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @custom-variant dark (&:where(.dark, .dark *));
+
+    /* Brand palette sampled from the falcon logo */
+    @theme {
+      --color-navy-950: #060b18;
+      --color-navy-800: #121f3d;
+      --color-navy-700: #1c2b4d;
+      --color-steel-300: #a9c6e2;
+      --color-steel-400: #7fa6cc;
+      --color-steel-500: #5683b0;
+      --color-steel-600: #3d6590;
+      --color-copper-300: #e6a777;
+      --color-copper-400: #d68a52;
+      --color-copper-500: #bf6d3a;
+      --color-ember-500: #f2762b;
+      --font-display: "Orbitron", ui-sans-serif, system-ui, sans-serif;
+      --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    }
+
+    /* Theme tokens: switch between light and dark */
+    @theme inline {
+      --color-bg: var(--bg);
+      --color-elevated: var(--elevated);
+      --color-elevated-2: var(--elevated-2);
+      --color-fg: var(--fg);
+      --color-fg-soft: var(--fg-soft);
+      --color-muted: var(--muted);
+      --color-line: var(--line);
+      --color-line-strong: var(--line-strong);
+      --color-accent: var(--accent);
+      --color-accent-2: var(--accent-2);
+      --color-info: var(--info);
+    }
+
+    :root {
+      --bg: #f3f6fa; --elevated: #ffffff; --elevated-2: #e8eef5;
+      --fg: #0b1429; --fg-soft: #24334f; --muted: #52627a;
+      --line: rgb(28 43 77 / 0.12); --line-strong: rgb(28 43 77 / 0.24);
+      --accent: #9c4f1c; --accent-2: #a95a24; --info: #2f5c8a;
+      --panel-from: #ffffff; --panel-to: #f8fafd;
+      --panel-shadow: 0 1px 2px rgb(11 20 41 / 0.05), 0 12px 32px -16px rgb(11 20 41 / 0.18);
+      --field-bg: #ffffff; --heading-from: #0b1429; --heading-to: #3d6590;
+      --copper-from: #bf6d3a; --copper-to: #d9561a; --glow-opacity: 0.35;
+      color-scheme: light;
+    }
+    .dark {
+      --bg: #060b18; --elevated: #0b1429; --elevated-2: #121f3d;
+      --fg: #f2f6fa; --fg-soft: #dbe4ee; --muted: #a3b1c2;
+      --line: rgb(127 166 204 / 0.16); --line-strong: rgb(127 166 204 / 0.38);
+      --accent: #e6a777; --accent-2: #d68a52; --info: #a9c6e2;
+      --panel-from: rgb(28 43 77 / 0.75); --panel-to: rgb(11 20 41 / 0.85); --panel-shadow: none;
+      --field-bg: rgb(6 11 24 / 0.7); --heading-from: #f2f6fa; --heading-to: #7fa6cc;
+      --copper-from: #e6a777; --copper-to: #f2762b; --glow-opacity: 1;
+      color-scheme: dark;
+    }
+
+    /* ── Languages: <span class="en"> shows in English, <span class="ar"> in Arabic ── */
+    html:not([lang="ar"]) .ar, html[lang="ar"] .en { display: none !important; }
+    html[lang="ar"] { --font-display: "Cairo", ui-sans-serif, system-ui, sans-serif; --font-sans: "Cairo", ui-sans-serif, system-ui, sans-serif; }
+    html[lang="ar"] body * { letter-spacing: normal !important; } /* spacing breaks Arabic letter joining */
+
+    html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+    body { background: var(--bg); color: var(--fg-soft); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+    ::selection { background: var(--color-copper-500); color: #fff; }
+    :focus-visible { outline: 2px solid var(--color-ember-500); outline-offset: 3px; border-radius: 4px; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+
+    /* ── Icons (see the list at the end of this style block) ── */
+    .icon {
+      display: inline-block; width: 1.1em; height: 1.1em; flex-shrink: 0; background: currentColor;
+      -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat;
+    }
+    [dir="rtl"] .flip-rtl { transform: scaleX(-1); }
+
+    /* ── Building blocks ── */
+    @utility bg-circuit {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='%23bf6d3a' stroke-width='1.2' stroke-opacity='0.16'%3E%3Cpath d='M0 40h40l20 20h40M100 60v40l20 20h40M20 160v-40l20-20h30M160 20h-30l-20 20v30M60 0v20l-20 20M80 160v-30l20-20'/%3E%3C/g%3E%3Cg fill='%23bf6d3a' fill-opacity='0.28'%3E%3Ccircle cx='100' cy='60' r='2.5'/%3E%3Ccircle cx='160' cy='120' r='2.5'/%3E%3Ccircle cx='70' cy='100' r='2.5'/%3E%3Ccircle cx='110' cy='40' r='2.5'/%3E%3Ccircle cx='40' cy='40' r='2.5'/%3E%3Ccircle cx='100' cy='110' r='2.5'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .glow-blob { opacity: var(--glow-opacity); pointer-events: none; }
+    @utility glow-copper { box-shadow: 0 0 0 1px rgb(214 138 82 / 0.45), 0 0 24px -4px rgb(242 118 43 / 0.5); }
+    .text-gradient-steel { background: linear-gradient(180deg, var(--heading-from) 10%, var(--heading-to) 95%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .text-gradient-copper { background: linear-gradient(90deg, var(--copper-from), var(--copper-to)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    html[lang="ar"] .text-gradient-steel, html[lang="ar"] .text-gradient-copper { padding-block: 0.08em; }
+
+    @utility panel {
+      position: relative; border-radius: 0.75rem; border: 1px solid var(--line); box-shadow: var(--panel-shadow);
+      background: linear-gradient(160deg, var(--panel-from), var(--panel-to)); backdrop-filter: blur(6px);
+    }
+    @utility panel-hover {
+      transition: border-color .25s, box-shadow .25s;
+      &:hover { border-color: rgb(214 138 82 / 0.6); box-shadow: 0 0 28px -10px rgb(242 118 43 / 0.55); }
+    }
+    @utility chamfer { clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px)); }
+
+    @utility btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 44px; padding: .7rem 1.4rem;
+      font-family: var(--font-display); font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      transition: transform .15s, box-shadow .25s, border-color .25s;
+      &:active { transform: scale(.97); }
+      &:disabled { opacity: .55; cursor: not-allowed; }
+    }
+    html[lang="ar"] .btn, html[lang="ar"] .event-register { font-size: .95rem; }
+    @utility btn-primary {
+      color: var(--color-navy-950); background: linear-gradient(90deg, var(--color-copper-400), var(--color-ember-500));
+      &:hover { box-shadow: 0 0 28px -4px rgb(242 118 43 / 0.75); }
+    }
+    @utility btn-ghost {
+      color: var(--fg); border: 1px solid var(--line-strong); background: color-mix(in srgb, var(--elevated) 55%, transparent);
+      &:hover { border-color: var(--color-steel-400); }
+    }
+
+    .eyebrow { @apply mb-3 inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.3em] text-accent-2; }
+    .eyebrow::before, .eyebrow::after { content: ""; width: 1.5rem; height: 1px; background: var(--color-copper-500); }
+    .section-title { @apply font-display text-3xl font-black uppercase sm:text-4xl; }
+
+    /* Reveal-on-scroll (only when JavaScript runs) */
+    html.js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1); }
+    html.js .reveal.in { opacity: 1; transform: none; }
+
+    /* Hero emblem */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes float { 50% { transform: translateY(-10px); } }
+    .spin-slow { animation: spin 40s linear infinite; }
+    .spin-rev { animation: spin 60s linear infinite reverse; }
+    .float { animation: float 6s ease-in-out infinite; }
+
+    /* ── Event card (copy-paste blocks in the EVENTS section) ── */
+    .event { @apply panel panel-hover chamfer flex h-full flex-col overflow-hidden; }
+    .event[data-status="completed"] { opacity: .8; }
+    .event-cover { @apply bg-circuit relative grid h-36 place-items-center overflow-hidden border-b border-line bg-elevated-2; }
+    .event-cover img { @apply absolute inset-0 size-full object-cover; }
+    .event-badge { @apply absolute start-3 top-3 rounded border px-2 py-1 font-display text-[0.65rem] font-bold uppercase tracking-widest backdrop-blur; }
+    .tone-accent { background: rgb(191 109 58 / 0.15); color: var(--accent); border-color: rgb(214 138 82 / 0.5); }
+    .tone-info { background: rgb(86 131 176 / 0.1); color: var(--info); border-color: rgb(127 166 204 / 0.4); }
+    .tone-danger { background: rgb(239 68 68 / 0.15); color: #b91c1c; border-color: rgb(239 68 68 / 0.5); }
+    .dark .tone-danger { color: #fca5a5; }
+    .event-day { @apply absolute end-3 top-3 rounded-md border border-line-strong bg-bg/85 px-3 py-1.5 text-center backdrop-blur; }
+    .event-body { @apply flex flex-1 flex-col p-5; }
+    .event-game { @apply font-display text-[0.7rem] uppercase tracking-[0.2em] text-accent-2; }
+    .event-title { @apply mt-1 font-display text-lg font-bold text-fg; }
+    .event-desc { @apply mt-2 text-sm text-muted; }
+    .event-meta { @apply mt-4 space-y-2 text-sm text-fg-soft; }
+    .event-meta li { @apply flex items-start gap-2; }
+    .event-meta li::before { content: ""; @apply mt-0.5 size-4 shrink-0 bg-steel-500; -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat; }
+    .event-meta .prize { @apply font-semibold text-accent; }
+    .event-meta .prize::before { @apply bg-ember-500; }
+    .event-register { @apply btn btn-ghost mt-auto w-full; margin-top: 1.5rem; }
+    .event[data-status="completed"] .event-register { display: none; }
+
+    /* ── Member card (copy-paste blocks in the LEADERSHIP section) ── */
+    .member { @apply panel panel-hover chamfer flex h-full flex-col items-center p-6 text-center; }
+    .member-photo { @apply relative mb-5 grid size-28 place-items-center overflow-hidden rounded-full border-4 border-elevated bg-gradient-to-br from-steel-600 to-navy-800 font-display text-3xl font-black text-white; box-shadow: 0 0 0 3px rgb(214 138 82 / 0.55); }
+    .member-photo img { @apply size-full object-cover; }
+    .member-role { @apply font-display text-[0.7rem] font-bold uppercase tracking-[0.2em] text-accent-2; }
+    html[lang="ar"] .member-role { @apply text-sm; }
+    .member-name { @apply mt-1 text-lg font-bold text-fg; }
+    .member-info { @apply mt-4 w-full space-y-1.5 border-t border-line pt-4 text-sm text-muted; }
+
+    /* ── Form fields ── */
+    .label { display: block; margin-bottom: .4rem; font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--info); }
+    html[lang="ar"] .label { font-size: .875rem; }
+    .field { width: 100%; min-height: 44px; padding: .7rem .9rem; border-radius: .5rem; background: var(--field-bg); border: 1px solid var(--line-strong); color: var(--fg); transition: border-color .2s, box-shadow .2s; }
+    .field::placeholder { color: var(--muted); opacity: .75; }
+    .field:focus { outline: none; border-color: var(--color-copper-400); box-shadow: 0 0 0 3px rgb(214 138 82 / 0.22); }
+    [dir="rtl"] .field[dir="ltr"] { text-align: end; }
+
+    /* Icons: use <span class="icon i-NAME"></span>. Shapes adapted from Lucide (ISC license). */
+    .i-calendar { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E"); }
+    .i-clock { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 6v6l4 2'/%3E%3C/svg%3E"); }
+    .i-pin { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z'/%3E%3Ccircle cx='12' cy='10' r='3'/%3E%3C/svg%3E"); }
+    .i-swords { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.5 17.5 3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M14.5 6.5 18 3h3v3l-3.5 3.5M5 14l4 4M7 17l-3 3M3 19l2 2'/%3E%3C/svg%3E"); }
+    .i-trophy { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z'/%3E%3C/svg%3E"); }
+    .i-users { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'/%3E%3C/svg%3E"); }
+    .i-target { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Ccircle cx='12' cy='12' r='6'/%3E%3Ccircle cx='12' cy='12' r='2'/%3E%3C/svg%3E"); }
+    .i-gamepad { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12h4M8 10v4M15 13h.01M18 11h.01'/%3E%3Crect x='2' y='6' width='20' height='12' rx='2'/%3E%3C/svg%3E"); }
+    .i-arrow { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M12 5l7 7-7 7'/%3E%3C/svg%3E"); }
+    .i-check { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E"); }
+    .i-shield { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1Z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E"); }
+    .i-menu { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6h16M4 12h16M4 18h16'/%3E%3C/svg%3E"); }
+    .i-x-mark { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18M6 6l12 12'/%3E%3C/svg%3E"); }
+    .i-sun { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41'/%3E%3C/svg%3E"); }
+    .i-moon { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z'/%3E%3C/svg%3E"); }
+    .i-mail { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='16' rx='2'/%3E%3Cpath d='m22 7-10 6L2 7'/%3E%3C/svg%3E"); }
+    .i-instagram { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='2' width='20' height='20' rx='5'/%3E%3Ccircle cx='12' cy='12' r='4.2'/%3E%3Cpath d='M17.5 6.5h.01'/%3E%3C/svg%3E"); }
+    .i-discord { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M20.32 4.37A19.8 19.8 0 0 0 15.39 2.8a13.9 13.9 0 0 0-.63 1.29 18.4 18.4 0 0 0-5.52 0 13 13 0 0 0-.64-1.29 19.7 19.7 0 0 0-4.93 1.53C.53 9.05-.32 13.6.1 18.1a19.9 19.9 0 0 0 6.04 3.05c.49-.66.92-1.36 1.3-2.1a12.9 12.9 0 0 1-2.04-.98l.5-.39a14.2 14.2 0 0 0 12.2 0l.5.39c-.65.39-1.33.71-2.05.98.38.74.81 1.44 1.3 2.1a19.8 19.8 0 0 0 6.05-3.05c.5-5.22-.84-9.73-3.58-13.73ZM8.02 15.33c-1.18 0-2.16-1.08-2.16-2.42s.96-2.42 2.16-2.42c1.21 0 2.18 1.09 2.16 2.42 0 1.34-.96 2.42-2.16 2.42Zm7.96 0c-1.18 0-2.15-1.08-2.15-2.42s.95-2.42 2.15-2.42c1.21 0 2.18 1.09 2.16 2.42 0 1.34-.95 2.42-2.16 2.42Z'/%3E%3C/svg%3E"); }
+    .i-twitch { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M11.57 4.71h1.72v5.14h-1.72Zm4.71 0H18v5.14h-1.72ZM6 0 1.71 4.29v15.42h5.15V24l4.28-4.29h3.43L22.29 12V0Zm14.57 11.14-3.43 3.43h-3.43l-3 3v-3H6.86V1.71h13.71Z'/%3E%3C/svg%3E"); }
+    .i-x { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.48l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93Zm-1.29 19.5h2.04L6.48 3.24H4.3l13.31 17.41Z'/%3E%3C/svg%3E"); }
+    .dark .light-only, html:not(.dark) .dark-only { display: none; }
+  </style>
+</head>
+
+<body class="min-h-dvh overflow-x-hidden">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[100] focus:rounded focus:bg-copper-500 focus:px-4 focus:py-2 focus:text-navy-950">
+    <span class="en">Skip to content</span><span class="ar">تخطَّ إلى المحتوى</span>
+  </a>
+
+  <!-- ════════════════════════════ NAVBAR ════════════════════════════ -->
+  <header id="navbar" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
+    <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6" data-label-en="Main" data-label-ar="القائمة الرئيسية">
+      <a href="#top" class="flex min-w-0 items-center gap-3">
+        <img src="assets/logo-transparent.png" alt="" class="size-10 rounded-full ring-1 ring-copper-500/50" />
+        <span class="hidden truncate font-display text-sm font-bold uppercase tracking-widest text-fg min-[420px]:inline">
+          PMU <span class="text-accent-2"><span class="en">E-Sports</span><span class="ar">للرياضات الإلكترونية</span></span>
+        </span>
+      </a>
+
+      <ul class="hidden items-center gap-1 lg:flex">
+        <li><a class="nav-link rounded px-3 py-2 text-sm font-medium text-muted transition-colors hover:text-accent" href="#about"><span class="en">About</span><span class="ar">من نحن</span></a></li>
+        <li><a class="nav-link rounded px-3 py-2 text-sm font-medium text-muted transition-colors hover:text-accent" href="#events"><span class="en">Events</span><span class="ar">الفعاليات</span></a></li>
+        <li><a class="nav-link rounded px-3 py-2 text-sm font-medium text-muted transition-colors hover:text-accent" href="#leadership"><span class="en">Leadership</span><span class="ar">القيادة</span></a></li>
+        <li><a class="nav-link rounded px-3 py-2 text-sm font-medium text-muted transition-colors hover:text-accent" href="#sponsors"><span class="en">Sponsors</span><span class="ar">الرعاة</span></a></li>
+      </ul>
+
+      <div class="flex shrink-0 items-center gap-2">
+        <button id="lang-toggle" type="button" class="flex h-10 items-center rounded-full border border-line-strong bg-elevated/60 p-1 transition-colors hover:border-copper-400" data-label-en="التبديل إلى العربية" data-label-ar="Switch to English">
+          <span data-lang-pill="en" class="grid h-8 min-w-9 place-items-center rounded-full px-2 font-display text-xs font-bold tracking-wider">EN</span>
+          <span data-lang-pill="ar" class="grid h-8 min-w-9 place-items-center rounded-full px-2 text-sm font-bold" style="font-family: Cairo, sans-serif">ع</span>
+        </button>
+        <button id="theme-toggle" type="button" class="grid size-10 place-items-center rounded-full border border-line-strong bg-elevated/60 text-fg transition-colors hover:border-copper-400 hover:text-accent">
+          <span class="icon i-moon dark-only text-lg"></span>
+          <span class="icon i-sun light-only text-lg"></span>
+        </button>
+        <a href="#join" class="btn btn-primary chamfer hidden min-h-10! px-4! py-2! md:inline-flex"><span class="en">Join the Club</span><span class="ar">انضم إلينا</span></a>
+        <button id="menu-toggle" type="button" class="grid size-10 place-items-center rounded text-fg lg:hidden" aria-expanded="false" aria-controls="mobile-menu" data-label-en="Open menu" data-label-ar="فتح القائمة">
+          <span class="icon i-menu text-2xl"></span>
+        </button>
+      </div>
+    </nav>
+
+    <div id="mobile-menu" class="hidden border-t border-line lg:hidden">
+      <ul class="space-y-1 px-4 py-4 font-display text-sm uppercase tracking-wider">
+        <li><a class="block rounded-md border-s-2 border-transparent px-3 py-3 text-fg-soft hover:bg-elevated-2 hover:text-accent" href="#about"><span class="en">About</span><span class="ar">من نحن</span></a></li>
+        <li><a class="block rounded-md border-s-2 border-transparent px-3 py-3 text-fg-soft hover:bg-elevated-2 hover:text-accent" href="#events"><span class="en">Events</span><span class="ar">الفعاليات</span></a></li>
+        <li><a class="block rounded-md border-s-2 border-transparent px-3 py-3 text-fg-soft hover:bg-elevated-2 hover:text-accent" href="#leadership"><span class="en">Leadership</span><span class="ar">القيادة</span></a></li>
+        <li><a class="block rounded-md border-s-2 border-transparent px-3 py-3 text-fg-soft hover:bg-elevated-2 hover:text-accent" href="#sponsors"><span class="en">Sponsors</span><span class="ar">الرعاة</span></a></li>
+        <li><a class="block rounded-md border-s-2 border-copper-400 px-3 py-3 text-accent hover:bg-elevated-2" href="#join"><span class="en">Join the Club</span><span class="ar">انضم إلى النادي</span></a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main" class="pt-16">
+
+    <!-- ════════════════════════════ HERO ════════════════════════════ -->
+    <section id="top" class="relative isolate flex min-h-[calc(100dvh-4rem)] items-center overflow-hidden">
+      <div aria-hidden="true" class="bg-circuit absolute inset-0 -z-20 opacity-70"></div>
+      <div aria-hidden="true" class="glow-blob absolute start-1/4 top-1/4 -z-10 size-[40rem] rounded-full bg-steel-600/25 blur-[120px]"></div>
+      <div aria-hidden="true" class="glow-blob absolute bottom-0 end-0 -z-10 size-[28rem] rounded-full bg-copper-500/15 blur-[120px]"></div>
+      <div aria-hidden="true" class="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-bg to-transparent"></div>
+
+      <div class="mx-auto grid w-full max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <div class="order-2 text-center lg:order-1 lg:text-start">
+          <p class="mb-5 inline-flex items-center gap-2 rounded-full border border-copper-500/40 bg-elevated/70 px-4 py-1.5 font-display text-[0.7rem] font-bold uppercase tracking-[0.25em] text-accent">
+            <span class="relative flex size-2"><span class="absolute inline-flex size-full animate-ping rounded-full bg-ember-500 opacity-75"></span><span class="relative inline-flex size-2 rounded-full bg-ember-500"></span></span>
+            <span class="en">Prince Mohammad bin Fahd University</span><span class="ar">جامعة الأمير محمد بن فهد</span>
+          </p>
+
+          <h1 class="font-display text-5xl font-black uppercase leading-[0.95] sm:text-6xl xl:text-7xl rtl:leading-[1.3]">
+            <span class="en"><span class="block text-gradient-steel">PMU</span><span class="block text-gradient-copper">E-Sports</span><span class="block text-gradient-steel">Club</span></span>
+            <span class="ar"><span class="block text-gradient-steel">نادي PMU</span><span class="block text-gradient-copper">للرياضات</span><span class="block text-gradient-steel">الإلكترونية</span></span>
+          </h1>
+
+          <p class="mx-auto mt-6 max-w-xl text-lg text-muted lg:mx-0">
+            <span class="en">Forge your legend. Compete for PMU. Tournaments, community nights and a team that plays to win.</span>
+            <span class="ar">اصنع أسطورتك. نافس باسم PMU. بطولات، وأمسيات مجتمعية، وفريق يلعب ليفوز.</span>
+          </p>
+
+          <div class="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
+            <a href="#join" class="btn btn-primary chamfer w-full sm:w-auto"><span class="en">Join the Club</span><span class="ar">انضم إلى النادي</span> <span class="icon i-arrow flip-rtl"></span></a>
+            <a href="#events" class="btn btn-ghost chamfer w-full sm:w-auto"><span class="en">View Tournaments</span><span class="ar">استعرض البطولات</span></a>
+          </div>
+
+          <!-- Filled in automatically with the next upcoming event -->
+          <a id="next-event" href="#events" class="panel panel-hover mt-10 hidden items-center gap-4 px-4 py-3 text-start">
+            <span class="grid size-10 place-items-center rounded-md bg-copper-500/15 text-accent"><span class="icon i-calendar text-xl"></span></span>
+            <span>
+              <span class="block font-display text-[0.65rem] uppercase tracking-[0.2em] text-accent-2"><span class="en">Next up</span><span class="ar">الفعالية القادمة</span></span>
+              <span class="block font-semibold text-fg" data-next="title"></span>
+              <span class="block text-sm text-muted" data-next="when"></span>
+            </span>
+          </a>
+        </div>
+
+        <div class="relative order-1 mx-auto grid aspect-square w-64 place-items-center sm:w-80 lg:order-2 lg:w-[26rem]">
+          <div aria-hidden="true" class="spin-slow absolute inset-0 rounded-full border border-dashed border-copper-500/40"></div>
+          <div aria-hidden="true" class="spin-rev absolute inset-5 rounded-full border border-steel-400/30">
+            <span class="absolute left-1/2 top-0 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ember-500 shadow-[0_0_12px_2px_rgb(242_118_43/0.8)]"></span>
+            <span class="absolute right-0 top-1/2 size-2 translate-x-1/2 -translate-y-1/2 rounded-full bg-ember-500 shadow-[0_0_12px_2px_rgb(242_118_43/0.8)]"></span>
+            <span class="absolute bottom-0 left-1/2 size-2 -translate-x-1/2 translate-y-1/2 rounded-full bg-ember-500 shadow-[0_0_12px_2px_rgb(242_118_43/0.8)]"></span>
+            <span class="absolute left-0 top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ember-500 shadow-[0_0_12px_2px_rgb(242_118_43/0.8)]"></span>
+          </div>
+          <div aria-hidden="true" class="glow-blob absolute inset-12 animate-pulse rounded-full bg-steel-500/30 blur-3xl"></div>
+          <img src="assets/logo-transparent.png" alt="PMU E-Sports Club logo" class="float relative size-48 rounded-full shadow-[0_0_80px_-10px_rgb(86_131_176/0.8)] ring-2 ring-navy-700 sm:size-60 lg:size-80" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════ ABOUT ════════════════════════════ -->
+    <section id="about" class="relative px-4 py-20 sm:px-6">
+      <div aria-hidden="true" class="bg-circuit absolute inset-0 -z-10 opacity-30"></div>
+      <div class="mx-auto max-w-7xl">
+        <div class="reveal mx-auto mb-12 max-w-2xl text-center">
+          <p class="eyebrow"><span class="en">Our Vision</span><span class="ar">رؤيتنا</span></p>
+          <h2 class="section-title text-gradient-steel"><span class="en">Who We Are</span><span class="ar">من نحن</span></h2>
+        </div>
+
+        <div class="reveal panel chamfer mx-auto max-w-4xl p-8 text-center sm:p-10">
+          <p class="text-lg leading-relaxed text-fg-soft sm:text-xl rtl:leading-loose">
+            <span class="en">To build the leading collegiate e-sports community in the Eastern Province, where students compete at the highest level, develop leadership and teamwork skills, and represent PMU on regional and international stages.</span>
+            <span class="ar">أن نبني المجتمع الجامعي الرائد للرياضات الإلكترونية في المنطقة الشرقية، حيث يتنافس الطلاب على أعلى المستويات، ويطوّرون مهارات القيادة والعمل الجماعي، ويمثّلون جامعة الأمير محمد بن فهد على المنصات الإقليمية والدولية.</span>
+          </p>
+        </div>
+
+        <div class="mt-12 grid gap-5 md:grid-cols-3">
+          <article class="reveal panel panel-hover p-6">
+            <span class="mb-5 grid size-12 place-items-center rounded-lg border border-copper-500/40 bg-copper-500/10 text-accent"><span class="icon i-swords text-2xl"></span></span>
+            <h3 class="font-display text-lg font-bold uppercase tracking-wide text-fg"><span class="en">Compete</span><span class="ar">نافس</span></h3>
+            <p class="mt-2 text-muted"><span class="en">Varsity rosters, internal leagues and regional collegiate tournaments.</span><span class="ar">فرق تمثّل الجامعة، ودوريات داخلية، وبطولات جامعية إقليمية.</span></p>
+          </article>
+          <article class="reveal panel panel-hover p-6">
+            <span class="mb-5 grid size-12 place-items-center rounded-lg border border-copper-500/40 bg-copper-500/10 text-accent"><span class="icon i-users text-2xl"></span></span>
+            <h3 class="font-display text-lg font-bold uppercase tracking-wide text-fg"><span class="en">Community</span><span class="ar">مجتمع</span></h3>
+            <p class="mt-2 text-muted"><span class="en">Weekly game nights, watch parties and a welcoming space for every skill level.</span><span class="ar">أمسيات ألعاب أسبوعية، وحفلات مشاهدة جماعية، ومساحة ترحّب بجميع المستويات.</span></p>
+          </article>
+          <article class="reveal panel panel-hover p-6">
+            <span class="mb-5 grid size-12 place-items-center rounded-lg border border-copper-500/40 bg-copper-500/10 text-accent"><span class="icon i-target text-2xl"></span></span>
+            <h3 class="font-display text-lg font-bold uppercase tracking-wide text-fg"><span class="en">Grow</span><span class="ar">تطوّر</span></h3>
+            <p class="mt-2 text-muted"><span class="en">Workshops on casting, streaming, event management and game development.</span><span class="ar">ورش عمل في التعليق، والبث المباشر، وإدارة الفعاليات، وتطوير الألعاب.</span></p>
+          </article>
+        </div>
+
+        <!-- Club numbers: edit the number and the two labels -->
+        <dl class="reveal mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line md:grid-cols-4">
+          <div class="flex flex-col-reverse bg-elevated px-4 py-8 text-center"><dt class="mt-2 text-xs uppercase tracking-[0.2em] text-muted rtl:text-sm"><span class="en">Active Members</span><span class="ar">عضو نشط</span></dt><dd class="font-display text-3xl font-black text-gradient-copper sm:text-4xl" dir="ltr">150+</dd></div>
+          <div class="flex flex-col-reverse bg-elevated px-4 py-8 text-center"><dt class="mt-2 text-xs uppercase tracking-[0.2em] text-muted rtl:text-sm"><span class="en">Tournaments Hosted</span><span class="ar">بطولة نظّمناها</span></dt><dd class="font-display text-3xl font-black text-gradient-copper sm:text-4xl" dir="ltr">12</dd></div>
+          <div class="flex flex-col-reverse bg-elevated px-4 py-8 text-center"><dt class="mt-2 text-xs uppercase tracking-[0.2em] text-muted rtl:text-sm"><span class="en">Titles Won</span><span class="ar">لقبًا حققناه</span></dt><dd class="font-display text-3xl font-black text-gradient-copper sm:text-4xl" dir="ltr">7</dd></div>
+          <div class="flex flex-col-reverse bg-elevated px-4 py-8 text-center"><dt class="mt-2 text-xs uppercase tracking-[0.2em] text-muted rtl:text-sm"><span class="en">Games Played</span><span class="ar">ألعاب نشارك فيها</span></dt><dd class="font-display text-3xl font-black text-gradient-copper sm:text-4xl" dir="ltr">8</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════ EVENTS ════════════════════════════
+         TO ADD AN EVENT: copy one whole <article class="event"> ... </article> block,
+         paste it inside the list below, then edit it:
+           • data-status → "upcoming", "live" or "completed"
+           • data-date   → the date as YEAR-MONTH-DAY, e.g. "2026-12-10"
+           • the text inside <span class="en"> (English) and <span class="ar"> (Arabic)
+         The order on the page is automatic (live, then upcoming by date, then past). -->
+    <section id="events" class="relative px-4 py-20 sm:px-6">
+      <div aria-hidden="true" class="bg-circuit absolute inset-0 -z-10 opacity-40"></div>
+      <div class="mx-auto max-w-7xl">
+        <div class="reveal mx-auto mb-12 max-w-2xl text-center">
+          <p class="eyebrow"><span class="en">Tournaments &amp; Events</span><span class="ar">البطولات والفعاليات</span></p>
+          <h2 class="section-title text-gradient-steel"><span class="en">The Battle Board</span><span class="ar">لوحة المعارك</span></h2>
+          <p class="mt-4 text-muted"><span class="en">Upcoming brackets, game nights and everything in between. Sign up early, as spots fill fast.</span><span class="ar">البطولات القادمة وأمسيات الألعاب وكل ما بينهما. سجّل مبكرًا فالمقاعد محدودة.</span></p>
+        </div>
+
+        <div id="event-filters" role="tablist" class="mb-10 flex justify-center gap-2">
+          <button type="button" role="tab" data-filter="all" class="min-h-11 rounded-md px-5 font-display text-xs font-bold uppercase tracking-widest transition-colors rtl:text-sm"><span class="en">All</span><span class="ar">الكل</span></button>
+          <button type="button" role="tab" data-filter="upcoming" class="min-h-11 rounded-md px-5 font-display text-xs font-bold uppercase tracking-widest transition-colors rtl:text-sm"><span class="en">Upcoming</span><span class="ar">القادمة</span></button>
+          <button type="button" role="tab" data-filter="completed" class="min-h-11 rounded-md px-5 font-display text-xs font-bold uppercase tracking-widest transition-colors rtl:text-sm"><span class="en">Past</span><span class="ar">السابقة</span></button>
+        </div>
+
+        <div id="event-list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+          <!-- ▼▼▼ EVENT ▼▼▼ -->
+          <article class="event" data-status="upcoming" data-date="2026-11-12">
+            <div class="event-cover">
+              <!-- Optional picture: <img src="https://example.com/poster.jpg" alt=""> -->
+            </div>
+            <div class="event-body">
+              <p class="event-game">Valorant</p>
+              <h3 class="event-title"><span class="en">Valorant Fall Cup</span><span class="ar">كأس الخريف لفالورانت</span></h3>
+              <p class="event-desc"><span class="en">Our flagship fall tournament. Teams of five battle through a double-elimination bracket for the cup.</span><span class="ar">بطولتنا الأبرز لفصل الخريف. فرق من خمسة لاعبين تتنافس في نظام خروج مغلوب مزدوج على الكأس.</span></p>
+              <ul class="event-meta">
+                <li class="i-clock" dir="ltr">18:00</li>
+                <li class="i-pin"><span class="en">PMU Gaming Lab, Building 3</span><span class="ar">مختبر الألعاب، مبنى 3</span></li>
+                <li class="i-swords"><span class="en">5v5 · Double Elimination</span><span class="ar">5 ضد 5 · خروج مغلوب مزدوج</span></li>
+                <li class="i-trophy prize"><span class="en">SAR 3,000 + Trophies</span><span class="ar">3,000 ريال + كؤوس</span></li>
+              </ul>
+              <a class="event-register" href="#join"><span class="en">Register</span><span class="ar">سجّل الآن</span></a>
+            </div>
+          </article>
+          <!-- ▲▲▲ END EVENT ▲▲▲ -->
+
+          <!-- ▼▼▼ EVENT ▼▼▼ -->
+          <article class="event" data-status="upcoming" data-date="2026-10-22">
+            <div class="event-cover"></div>
+            <div class="event-body">
+              <p class="event-game">EA Sports FC 26</p>
+              <h3 class="event-title"><span class="en">EA FC 26 Showdown</span><span class="ar">مواجهة EA FC 26</span></h3>
+              <p class="event-desc"><span class="en">Bring your best squad. Open to all PMU students.</span><span class="ar">أحضر أفضل تشكيلة لديك. مفتوحة لجميع طلاب الجامعة.</span></p>
+              <ul class="event-meta">
+                <li class="i-clock" dir="ltr">17:00</li>
+                <li class="i-pin"><span class="en">Student Center Hall</span><span class="ar">قاعة مركز الطلاب</span></li>
+                <li class="i-swords"><span class="en">1v1 · Swiss + Playoffs</span><span class="ar">1 ضد 1 · نظام سويسري + أدوار إقصائية</span></li>
+                <li class="i-trophy prize"><span class="en">SAR 1,500</span><span class="ar">1,500 ريال</span></li>
+              </ul>
+              <a class="event-register" href="#join"><span class="en">Register</span><span class="ar">سجّل الآن</span></a>
+            </div>
+          </article>
+          <!-- ▲▲▲ END EVENT ▲▲▲ -->
+
+          <!-- ▼▼▼ EVENT ▼▼▼ -->
+          <article class="event" data-status="completed" data-date="2026-09-18">
+            <div class="event-cover"></div>
+            <div class="event-body">
+              <p class="event-game">Rocket League</p>
+              <h3 class="event-title"><span class="en">Rocket League 3v3 Night</span><span class="ar">أمسية روكيت ليغ 3 ضد 3</span></h3>
+              <p class="event-desc"><span class="en">A casual-competitive evening of aerials and demos.</span><span class="ar">أمسية تنافسية ممتعة مليئة بالحركات الهوائية.</span></p>
+              <ul class="event-meta">
+                <li class="i-clock" dir="ltr">19:00</li>
+                <li class="i-pin"><span class="en">Online</span><span class="ar">عبر الإنترنت</span></li>
+                <li class="i-swords"><span class="en">3v3 · Single Elimination</span><span class="ar">3 ضد 3 · خروج مغلوب</span></li>
+                <li class="i-trophy prize"><span class="en">Club Merch</span><span class="ar">منتجات النادي</span></li>
+              </ul>
+              <a class="event-register" href="#join"><span class="en">Register</span><span class="ar">سجّل الآن</span></a>
+            </div>
+          </article>
+          <!-- ▲▲▲ END EVENT ▲▲▲ -->
+
+        </div>
+        <p id="events-empty" class="panel mx-auto mt-6 hidden max-w-md p-8 text-center text-muted"><span class="en">No events here yet. Check back soon!</span><span class="ar">لا توجد فعاليات هنا بعد. تابعنا قريبًا!</span></p>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════ LEADERSHIP ════════════════════════════
+         TO ADD A MEMBER: copy one whole <article class="member"> ... </article> block,
+         paste it where you want it to appear, then edit the English and Arabic text.
+         Photo (optional): upload a square picture to the assets/roster folder, then put
+         <img src="assets/roster/FILE-NAME.jpg" alt=""> inside <div class="member-photo">.
+         With no photo, the member's initials are shown automatically. -->
+    <section id="leadership" class="relative px-4 py-20 sm:px-6">
+      <div class="mx-auto max-w-7xl">
+        <div class="reveal mx-auto mb-12 max-w-2xl text-center">
+          <p class="eyebrow"><span class="en">Leadership</span><span class="ar">القيادة</span></p>
+          <h2 class="section-title text-gradient-steel"><span class="en">The Command Board</span><span class="ar">مجلس القيادة</span></h2>
+          <p class="mt-4 text-muted"><span class="en">The students running the club, organizing tournaments and leading our teams.</span><span class="ar">الطلاب الذين يديرون النادي وينظمون البطولات ويقودون فرقنا.</span></p>
+        </div>
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+
+          <!-- ▼▼▼ MEMBER ▼▼▼ -->
+          <article class="member reveal">
+            <div class="member-photo"></div>
+            <p class="member-role"><span class="en">President</span><span class="ar">الرئيس</span></p>
+            <h3 class="member-name"><span class="en">Abdullah Al-Qahtani</span><span class="ar">عبدالله القحطاني</span></h3>
+            <div class="member-info">
+              <p><span class="en">Computer Engineering</span><span class="ar">هندسة الحاسب</span></p>
+              <p dir="ltr">Valorant</p>
+            </div>
+          </article>
+          <!-- ▲▲▲ END MEMBER ▲▲▲ -->
+
+          <!-- ▼▼▼ MEMBER ▼▼▼ -->
+          <article class="member reveal">
+            <div class="member-photo"></div>
+            <p class="member-role"><span class="en">Vice President</span><span class="ar">نائب الرئيس</span></p>
+            <h3 class="member-name"><span class="en">Faisal Al-Dossary</span><span class="ar">فيصل الدوسري</span></h3>
+            <div class="member-info">
+              <p><span class="en">Software Engineering</span><span class="ar">هندسة البرمجيات</span></p>
+              <p dir="ltr">Rocket League</p>
+            </div>
+          </article>
+          <!-- ▲▲▲ END MEMBER ▲▲▲ -->
+
+          <!-- ▼▼▼ MEMBER ▼▼▼ -->
+          <article class="member reveal">
+            <div class="member-photo"></div>
+            <p class="member-role"><span class="en">Events Lead</span><span class="ar">مسؤول الفعاليات</span></p>
+            <h3 class="member-name"><span class="en">Omar Al-Harbi</span><span class="ar">عمر الحربي</span></h3>
+            <div class="member-info">
+              <p><span class="en">Business Administration</span><span class="ar">إدارة الأعمال</span></p>
+              <p dir="ltr">EA Sports FC 26</p>
+            </div>
+          </article>
+          <!-- ▲▲▲ END MEMBER ▲▲▲ -->
+
+          <!-- ▼▼▼ MEMBER ▼▼▼ -->
+          <article class="member reveal">
+            <div class="member-photo"></div>
+            <p class="member-role"><span class="en">Media &amp; Streaming</span><span class="ar">الإعلام والبث</span></p>
+            <h3 class="member-name"><span class="en">Khalid Al-Shehri</span><span class="ar">خالد الشهري</span></h3>
+            <div class="member-info">
+              <p><span class="en">Information Technology</span><span class="ar">تقنية المعلومات</span></p>
+              <p dir="ltr">League of Legends</p>
+            </div>
+          </article>
+          <!-- ▲▲▲ END MEMBER ▲▲▲ -->
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════ SPONSORS ════════════════════════════
+         To show a sponsor's logo, upload it to the assets folder and replace the CLIX text with
+         <img src="assets/FILE-NAME.png" alt="Clix" class="h-14 w-auto">
+         and replace href="#" with the sponsor's website address. -->
+    <section id="sponsors" class="relative px-4 py-20 sm:px-6">
+      <div aria-hidden="true" class="glow-blob absolute inset-x-0 top-1/4 -z-10 mx-auto h-80 max-w-3xl rounded-full bg-copper-500/10 blur-[120px]"></div>
+      <div class="mx-auto max-w-5xl">
+        <div class="reveal mx-auto mb-12 max-w-2xl text-center">
+          <p class="eyebrow"><span class="en">Partners</span><span class="ar">شركاؤنا</span></p>
+          <h2 class="section-title text-gradient-steel"><span class="en">Our Sponsors</span><span class="ar">رعاتنا</span></h2>
+          <p class="mt-4 text-muted"><span class="en">The partners who power our tournaments and community.</span><span class="ar">الشركاء الذين يدعمون بطولاتنا ومجتمعنا.</span></p>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-6">
+          <!-- ▼▼▼ SPONSOR ▼▼▼ -->
+          <a href="#" class="reveal panel panel-hover chamfer flex min-h-40 w-full max-w-xs flex-col items-center justify-center gap-3 p-8 text-center">
+            <span class="font-display text-4xl font-black tracking-[0.2em] text-gradient-copper">CLIX</span>
+            <span class="text-xs uppercase tracking-[0.2em] text-muted rtl:text-sm"><span class="en">Sponsor</span><span class="ar">راعٍ</span></span>
+          </a>
+          <!-- ▲▲▲ END SPONSOR ▲▲▲ -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════ JOIN (REGISTRATION) ════════════════════════════
+         Answers are sent to Formspree (form mqparrqb, see the script at the end of this file).
+         The "name" of each field is the label you will see in the Formspree inbox. -->
+    <section id="join" class="relative px-4 py-20 sm:px-6">
+      <div aria-hidden="true" class="bg-circuit absolute inset-0 -z-10 opacity-50"></div>
+      <div class="mx-auto max-w-4xl">
+        <div class="reveal mx-auto mb-12 max-w-2xl text-center">
+          <p class="eyebrow"><span class="en">Recruitment Open</span><span class="ar">التسجيل مفتوح</span></p>
+          <h2 class="section-title text-gradient-steel"><span class="en">Join the Club</span><span class="ar">انضم إلى النادي</span></h2>
+          <p class="mt-4 text-muted"><span class="en">Every skill level is welcome. Sign up and we'll add you to Discord and the next game night.</span><span class="ar">جميع المستويات مرحّب بها. سجّل وسنضيفك إلى Discord وإلى أمسية الألعاب القادمة.</span></p>
+        </div>
+
+        <form id="join-form" class="reveal panel chamfer relative space-y-8 overflow-hidden p-5 sm:p-10" novalidate>
+          <div aria-hidden="true" class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-copper-400 to-transparent"></div>
+          <!-- Spam trap: people never see this field -->
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div><label class="label" for="fullName"><span class="en">Full name</span><span class="ar">الاسم الكامل</span></label><input class="field" id="fullName" name="fullName" required autocomplete="name" /></div>
+            <div><label class="label" for="studentId"><span class="en">University ID</span><span class="ar">الرقم الجامعي</span></label><input class="field" id="studentId" name="studentId" dir="ltr" required inputmode="numeric" pattern="[0-9]{6,12}" /></div>
+            <div><label class="label" for="email"><span class="en">University email</span><span class="ar">البريد الجامعي</span></label><input class="field" id="email" name="email" type="email" dir="ltr" required autocomplete="email" placeholder="you@pmu.edu.sa" /></div>
+            <div><label class="label" for="phone"><span class="en">Phone</span><span class="ar">رقم الجوال</span></label><input class="field" id="phone" name="phone" type="tel" dir="ltr" required autocomplete="tel" placeholder="05X XXX XXXX" /></div>
+            <div><label class="label" for="major"><span class="en">Major</span><span class="ar">التخصص</span></label><input class="field" id="major" name="major" required /></div>
+            <div>
+              <label class="label" for="year"><span class="en">Study year</span><span class="ar">السنة الدراسية</span></label>
+              <select class="field" id="year" name="year" required>
+                <option value="" disabled selected data-en="Select…" data-ar="اختر…">Select…</option>
+                <option value="Foundation" data-en="Foundation" data-ar="السنة التحضيرية">Foundation</option>
+                <option value="Freshman" data-en="Freshman" data-ar="السنة الأولى">Freshman</option>
+                <option value="Sophomore" data-en="Sophomore" data-ar="السنة الثانية">Sophomore</option>
+                <option value="Junior" data-en="Junior" data-ar="السنة الثالثة">Junior</option>
+                <option value="Senior" data-en="Senior" data-ar="السنة الرابعة">Senior</option>
+                <option value="Graduate" data-en="Graduate" data-ar="دراسات عليا">Graduate</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
+            <p class="flex items-center gap-2 text-xs text-muted"><span class="icon i-shield text-steel-500"></span><span class="en">Your info is only shared with club leadership.</span><span class="ar">بياناتك لا تُشارك إلا مع قيادة النادي.</span></p>
+            <button type="submit" class="btn btn-primary chamfer w-full sm:w-auto">
+              <span data-when="idle"><span class="en">Submit Registration</span><span class="ar">أرسل التسجيل</span></span>
+              <span data-when="sending" class="hidden"><span class="en">Submitting…</span><span class="ar">جارٍ الإرسال…</span></span>
+            </button>
+          </div>
+          <p id="form-error" class="min-h-5 text-center text-sm text-red-600 dark:text-red-300" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ════════════════════════════ FOOTER ════════════════════════════ -->
+  <footer class="relative border-t border-line bg-elevated">
+    <div aria-hidden="true" class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-copper-500/70 to-transparent"></div>
+    <div class="mx-auto grid max-w-7xl gap-8 px-4 py-12 text-center sm:px-6 md:grid-cols-3 md:items-center md:text-start">
+      <div class="flex flex-col items-center gap-4 md:flex-row">
+        <img src="assets/logo-transparent.png" alt="" class="size-14 rounded-full" />
+        <div>
+          <p class="font-display text-sm font-bold uppercase tracking-widest text-fg"><span class="en">PMU E-Sports Club</span><span class="ar">نادي PMU للرياضات الإلكترونية</span></p>
+          <p class="text-sm text-muted"><span class="en">Prince Mohammad bin Fahd University</span><span class="ar">جامعة الأمير محمد بن فهد</span></p>
+        </div>
+      </div>
+      <ul class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
+        <li><a href="#events" class="text-muted transition-colors hover:text-accent"><span class="en">Events</span><span class="ar">الفعاليات</span></a></li>
+        <li><a href="#leadership" class="text-muted transition-colors hover:text-accent"><span class="en">Leadership</span><span class="ar">القيادة</span></a></li>
+        <li><a href="#sponsors" class="text-muted transition-colors hover:text-accent"><span class="en">Sponsors</span><span class="ar">الرعاة</span></a></li>
+        <li><a href="#join" class="text-muted transition-colors hover:text-accent"><span class="en">Join</span><span class="ar">انضم إلينا</span></a></li>
+      </ul>
+      <div class="flex flex-col items-center gap-3 md:items-end">
+        <!-- Social links: replace the addresses with the club's real accounts -->
+        <ul class="flex items-center gap-2">
+          <li><a href="https://discord.gg/your-invite" target="_blank" rel="noopener" aria-label="Discord" class="grid size-11 place-items-center rounded-md border border-line-strong text-muted transition-colors hover:border-copper-400 hover:text-accent"><span class="icon i-discord text-xl"></span></a></li>
+          <li><a href="https://twitch.tv/your-channel" target="_blank" rel="noopener" aria-label="Twitch" class="grid size-11 place-items-center rounded-md border border-line-strong text-muted transition-colors hover:border-copper-400 hover:text-accent"><span class="icon i-twitch text-xl"></span></a></li>
+          <li><a href="https://instagram.com/pmu_esports" target="_blank" rel="noopener" aria-label="Instagram" class="grid size-11 place-items-center rounded-md border border-line-strong text-muted transition-colors hover:border-copper-400 hover:text-accent"><span class="icon i-instagram text-xl"></span></a></li>
+          <li><a href="https://x.com/pmu_esports" target="_blank" rel="noopener" aria-label="X (Twitter)" class="grid size-11 place-items-center rounded-md border border-line-strong text-muted transition-colors hover:border-copper-400 hover:text-accent"><span class="icon i-x text-xl"></span></a></li>
+        </ul>
+        <a href="mailto:esports@pmu.edu.sa" class="inline-flex items-center gap-2 text-sm text-muted hover:text-accent"><span class="icon i-mail"></span> <span dir="ltr">esports@pmu.edu.sa</span></a>
+      </div>
+    </div>
+    <p class="pb-8 text-center text-xs text-muted">© <span id="copyright-year">2026</span> <span class="en">PMU E-Sports Club. Built by students, for students.</span><span class="ar">نادي PMU للرياضات الإلكترونية. صُنع بأيدي الطلاب، من أجل الطلاب.</span></p>
+  </footer>
+
+  <!-- Success message after registering -->
+  <div id="toast" role="status" aria-live="polite" class="pointer-events-none fixed inset-x-0 bottom-6 z-[60] flex justify-center px-4">
+    <div id="toast-card" class="glow-copper pointer-events-auto hidden w-full max-w-md items-center gap-3 rounded-xl border border-copper-400/60 bg-elevated px-4 py-3.5 text-fg shadow-2xl">
+      <span class="grid size-9 shrink-0 place-items-center rounded-full bg-copper-500/15 text-accent"><span class="icon i-check text-xl"></span></span>
+      <p class="flex-1 text-sm font-semibold leading-snug"><span class="en">Registration successful! Welcome to the PMU E-Sports Club.</span><span class="ar">تم التسجيل بنجاح! مرحبًا بك في نادي PMU للرياضات الإلكترونية.</span></p>
+      <button id="toast-close" type="button" class="grid size-8 shrink-0 place-items-center rounded-md text-muted hover:bg-elevated-2 hover:text-fg" data-label-en="Close" data-label-ar="إغلاق"><span class="icon i-x-mark"></span></button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════ SCRIPT ════════════════════════════
+       Language & theme switches, mobile menu, event dates/sorting/filters and the
+       registration form. You normally don't need to edit anything below. -->
+  <script>
+    (function () {
+      "use strict";
+
+      var FORMSPREE_URL = "https://formspree.io/f/mqparrqb";
+      var html = document.documentElement;
+      var $ = function (sel, root) { return (root || document).querySelector(sel); };
+      var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+      var lang = function () { return html.lang === "ar" ? "ar" : "en"; };
+      var store = function (key, value) { try { localStorage.setItem(key, value); } catch (e) {} };
+
+      /* ── Dates: "2026-11-12" → "Thu, 12 Nov 2026" / Arabic (Gregorian calendar, Latin digits) ── */
+      var LOCALES = { en: "en-GB", ar: "ar-SA-u-ca-gregory-nu-latn" };
+      function formatDate(iso, options) {
+        var p = String(iso).split("-").map(Number);
+        var d = new Date(p[0], (p[1] || 1) - 1, p[2] || 1);
+        if (isNaN(d)) return iso;
+        return d.toLocaleDateString(LOCALES[lang()], options);
+      }
+
+      /* ── Language ── */
+      var STATUS = {
+        live: { en: "Live", ar: "مباشر", tone: "danger" },
+        upcoming: { en: "Upcoming", ar: "قادمة", tone: "accent" },
+        completed: { en: "Completed", ar: "منتهية", tone: "info" }
+      };
+
+      function applyLanguage() {
+        var l = lang();
+        $$("[data-label-" + l + "]").forEach(function (el) { el.setAttribute("aria-label", el.getAttribute("data-label-" + l)); });
+        $$("[data-placeholder-" + l + "]").forEach(function (el) { el.placeholder = el.getAttribute("data-placeholder-" + l); });
+        $$("option[data-" + l + "]").forEach(function (el) { el.textContent = el.getAttribute("data-" + l); });
+        $$("[data-lang-pill]").forEach(function (pill) {
+          var on = pill.getAttribute("data-lang-pill") === l;
+          pill.style.background = on ? "linear-gradient(135deg, #d68a52, #f2762b)" : "transparent";
+          pill.style.color = on ? "#060b18" : "var(--muted)";
+        });
+        document.title = l === "ar" ? "نادي PMU للرياضات الإلكترونية" : "PMU E-Sports Club";
+        renderEvents();
+        updateThemeLabel();
+      }
+
+      $("#lang-toggle").addEventListener("click", function () {
+        var next = lang() === "ar" ? "en" : "ar";
+        html.lang = next;
+        html.dir = next === "ar" ? "rtl" : "ltr";
+        store("pmu-lang", next);
+        applyLanguage();
+      });
+
+      /* ── Theme ── */
+      function updateThemeLabel() {
+        var dark = html.classList.contains("dark");
+        var labels = { en: dark ? "Switch to light mode" : "Switch to dark mode", ar: dark ? "التبديل إلى الوضع الفاتح" : "التبديل إلى الوضع الداكن" };
+        $("#theme-toggle").setAttribute("aria-label", labels[lang()]);
+      }
+      $("#theme-toggle").addEventListener("click", function () {
+        var dark = html.classList.toggle("dark");
+        store("theme", dark ? "dark" : "light");
+        updateThemeLabel();
+      });
+
+      /* ── Navbar: background on scroll, mobile menu, active link ── */
+      var navbar = $("#navbar");
+      var menu = $("#mobile-menu");
+      var menuButton = $("#menu-toggle");
+      function onScroll() {
+        var solid = window.scrollY > 12 || !menu.classList.contains("hidden");
+        navbar.classList.toggle("bg-bg/85", solid);
+        navbar.classList.toggle("backdrop-blur-lg", solid);
+        navbar.classList.toggle("border-b", solid);
+        navbar.classList.toggle("border-line", solid);
+      }
+      function setMenu(open) {
+        menu.classList.toggle("hidden", !open);
+        menuButton.setAttribute("aria-expanded", String(open));
+        $(".icon", menuButton).className = "icon text-2xl " + (open ? "i-x-mark" : "i-menu");
+        onScroll();
+      }
+      menuButton.addEventListener("click", function () { setMenu(menu.classList.contains("hidden")); });
+      $$("a", menu).forEach(function (a) { a.addEventListener("click", function () { setMenu(false); }); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+
+      if ("IntersectionObserver" in window) {
+        var links = $$(".nav-link");
+        var spy = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            links.forEach(function (a) {
+              var active = a.getAttribute("href") === "#" + entry.target.id;
+              a.classList.toggle("text-accent", active);
+              a.classList.toggle("text-muted", !active);
+              if (active) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+            });
+          });
+        }, { rootMargin: "-45% 0px -50% 0px" });
+        links.forEach(function (a) { var section = $(a.getAttribute("href")); if (section) spy.observe(section); });
+
+        /* Reveal sections as they scroll into view */
+        var reveal = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { entry.target.classList.add("in"); reveal.unobserve(entry.target); }
+          });
+        }, { rootMargin: "0px 0px -60px 0px" });
+        $$(".reveal").forEach(function (el) { reveal.observe(el); });
+      } else {
+        $$(".reveal").forEach(function (el) { el.classList.add("in"); });
+      }
+
+      /* ── Events: status badge, date box, automatic order, filters, "Next up" ── */
+      var ORDER = { live: 0, upcoming: 1, completed: 2 };
+      var list = $("#event-list");
+      var events = $$(".event", list);
+      var filter = "all";
+
+      events.sort(function (a, b) {
+        var sa = a.getAttribute("data-status"), sb = b.getAttribute("data-status");
+        var byStatus = (ORDER[sa] !== undefined ? ORDER[sa] : 1) - (ORDER[sb] !== undefined ? ORDER[sb] : 1);
+        if (byStatus) return byStatus;
+        var da = a.getAttribute("data-date") || "", db = b.getAttribute("data-date") || "";
+        return sa === "completed" ? db.localeCompare(da) : da.localeCompare(db);
+      }).forEach(function (el) { list.appendChild(el); });
+
+      function renderEvents() {
+        events.forEach(function (ev) {
+          var status = STATUS[ev.getAttribute("data-status")] || STATUS.upcoming;
+          var iso = ev.getAttribute("data-date") || "";
+          var cover = $(".event-cover", ev);
+          var generated = $$("[data-generated]", cover);
+          generated.forEach(function (el) { el.remove(); });
+
+          if (!$("img", cover)) {
+            var pad = document.createElement("span");
+            pad.setAttribute("data-generated", "");
+            pad.className = "icon i-gamepad text-5xl text-steel-500/70";
+            cover.appendChild(pad);
+          }
+          var badge = document.createElement("span");
+          badge.setAttribute("data-generated", "");
+          badge.className = "event-badge tone-" + status.tone;
+          badge.textContent = status[lang()];
+          cover.appendChild(badge);
+
+          var day = document.createElement("div");
+          day.setAttribute("data-generated", "");
+          day.setAttribute("aria-hidden", "true");
+          day.className = "event-day";
+          day.innerHTML = '<span class="block font-display text-xl font-black leading-none text-fg"></span><span class="block text-[0.65rem] uppercase tracking-widest text-accent"></span>';
+          day.children[0].textContent = Number(iso.split("-")[2]) || "";
+          day.children[1].textContent = formatDate(iso, { month: "short" });
+          cover.appendChild(day);
+
+          // Full date as the first detail line
+          var meta = $(".event-meta", ev);
+          var dateLine = $("[data-generated]", meta) || document.createElement("li");
+          dateLine.setAttribute("data-generated", "");
+          dateLine.className = "i-calendar";
+          dateLine.textContent = formatDate(iso, { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+          if (!dateLine.parentNode) meta.insertBefore(dateLine, meta.firstChild);
+        });
+
+        // Hero "Next up" card = first live/upcoming event
+        var next = events.filter(function (ev) { return ev.getAttribute("data-status") !== "completed"; })[0];
+        var card = $("#next-event");
+        if (next) {
+          $("[data-next=title]", card).innerHTML = $(".event-title", next).innerHTML;
+          var time = $(".i-clock", next);
+          $("[data-next=when]", card).textContent = formatDate(next.getAttribute("data-date"), { day: "numeric", month: "short", year: "numeric" }) + (time ? " · " + time.textContent.trim() : "");
+          card.classList.remove("hidden");
+          card.classList.add("inline-flex");
+        }
+      }
+
+      function applyFilter() {
+        var shown = 0;
+        events.forEach(function (ev) {
+          var status = ev.getAttribute("data-status");
+          var visible = filter === "all" || (filter === "upcoming" ? status !== "completed" : status === "completed");
+          ev.classList.toggle("hidden", !visible);
+          if (visible) shown++;
+        });
+        $("#events-empty").classList.toggle("hidden", shown > 0);
+        $$("#event-filters [data-filter]").forEach(function (btn) {
+          var on = btn.getAttribute("data-filter") === filter;
+          btn.setAttribute("aria-selected", String(on));
+          btn.style.background = on ? "linear-gradient(90deg, #d68a52, #f2762b)" : "transparent";
+          btn.style.color = on ? "#060b18" : "var(--muted)";
+        });
+      }
+      $$("#event-filters [data-filter]").forEach(function (btn) {
+        btn.addEventListener("click", function () { filter = btn.getAttribute("data-filter"); applyFilter(); });
+      });
+
+      /* ── Members without a photo show their initials ── */
+      $$(".member").forEach(function (m) {
+        var photo = $(".member-photo", m);
+        if ($("img", photo) || photo.textContent.trim()) return;
+        var name = ($(".member-name .en", m) || $(".member-name", m)).textContent.trim();
+        photo.setAttribute("aria-hidden", "true");
+        photo.textContent = name.split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join("");
+      });
+
+      /* ── Registration form → Formspree ── */
+      var form = $("#join-form");
+      var errorBox = $("#form-error");
+      var toast = $("#toast-card");
+      var toastTimer;
+      var MESSAGES = {
+        invalid: { en: "Please fill in all fields correctly.", ar: "يرجى تعبئة جميع الحقول بشكل صحيح." },
+        failed: { en: "Something went wrong. Please try again.", ar: "حدث خطأ ما. يرجى المحاولة مرة أخرى." }
+      };
+
+      function showToast() {
+        toast.classList.remove("hidden");
+        toast.classList.add("flex");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(hideToast, 6000);
+      }
+      function hideToast() {
+        toast.classList.add("hidden");
+        toast.classList.remove("flex");
+      }
+      $("#toast-close").addEventListener("click", hideToast);
+
+      function setSending(sending) {
+        var button = $("button[type=submit]", form);
+        button.disabled = sending;
+        $("[data-when=idle]", button).classList.toggle("hidden", sending);
+        $("[data-when=sending]", button).classList.toggle("hidden", !sending);
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        errorBox.textContent = "";
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          errorBox.textContent = MESSAGES.invalid[lang()];
+          return;
+        }
+        var data = {};
+        new FormData(form).forEach(function (value, key) { data[key] = value; });
+        if (data._gotcha) return; // spam bot
+        data._subject = "New member: " + data.fullName;
+        data.language = lang();
+
+        setSending(true);
+        fetch(FORMSPREE_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(data)
+        })
+          .then(function (res) {
+            if (!res.ok) throw new Error("Formspree " + res.status);
+            form.reset();
+            showToast();
+          })
+          .catch(function () { errorBox.textContent = MESSAGES.failed[lang()]; })
+          .then(function () { setSending(false); });
+      });
+
+      $("#copyright-year").textContent = new Date().getFullYear();
+      applyLanguage();
+      applyFilter();
+    })();
+  </script>
+</body>
+</html>

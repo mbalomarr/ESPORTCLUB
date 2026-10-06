@@ -1,102 +1,77 @@
-# PMU E-Sports Club: Official Website
+# نادي PMU للرياضات الإلكترونية | PMU E-Sports Club
 
-Next.js 15 (App Router) · Tailwind CSS v4 · Framer Motion · Lucide · next-themes · English/Arabic (RTL) · Git-backed JSON content · GitHub Pages (static export)
+الموقع الرسمي لنادي الرياضات الإلكترونية في جامعة الأمير محمد بن فهد.
+الموقع كله في ملف واحد: **`index.html`**، والصور في مجلد **`assets`**. لا يحتاج إلى أي برنامج أو تثبيت.
 
-## Run locally
+- **النشر على MonsterASP:** راجع ملف [`MONSTERASP_DEPLOYMENT.md`](MONSTERASP_DEPLOYMENT.md)
+- **معاينة مباشرة على الإنترنت:** <https://mbalomarr.github.io/ESPORTCLUB/> (تتحدّث تلقائيًا بعد كل تعديل على GitHub)
 
-```bash
-npm install
-npm run dev
+---
+
+## دليل التعديل (للأستاذ)
+
+### كيف أعدّل ملفًا على GitHub؟
+1. افتح الملف `index.html` على GitHub.
+2. اضغط أيقونة القلم ✏️ (أعلى اليمين).
+3. استخدم البحث (**Ctrl + F** أو **⌘ + F**) للوصول إلى القسم المطلوب، مثلًا ابحث عن `EVENT` أو `MEMBER`.
+4. بعد التعديل اضغط **«Commit changes…»** ثم **«Commit changes»**.
+5. ارفع `index.html` الجديد إلى MonsterASP (راجع دليل النشر).
+
+### القاعدة الذهبية: كل نص له نسختان
+```html
+<span class="en">Valorant Fall Cup</span><span class="ar">كأس الخريف لفالورانت</span>
 ```
+- عدّل النص **بين** `>` و `<` فقط.
+- `class="en"` يظهر عند اختيار **EN**، و `class="ar"` يظهر عند اختيار **ع**.
+- لا تحذف علامات `<span ...>` و `</span>`.
 
-Requires Node.js 20+.
+### ➕ إضافة فعالية
+ابحث عن `▼▼▼ EVENT ▼▼▼`. انسخ الكتلة كاملة من `<!-- ▼▼▼ EVENT ▼▼▼ -->` إلى `<!-- ▲▲▲ END EVENT ▲▲▲ -->` والصقها تحتها، ثم عدّل:
 
-## Project structure
+| ما تعدّله | مثال | ملاحظة |
+|---|---|---|
+| `data-status="..."` | `upcoming` | `upcoming` قادمة، `live` مباشر، `completed` منتهية |
+| `data-date="..."` | `2026-12-10` | السنة-الشهر-اليوم بالأرقام الإنجليزية |
+| `<p class="event-game">` | `Valorant` | اسم اللعبة |
+| العنوان والوصف والمكان والجائزة | | النسخة الإنجليزية والعربية |
+| `<li class="i-clock" dir="ltr">` | `18:00` | الوقت (احذف السطر إن لم يوجد) |
 
-```
-.
-├── app/                       # Routes (App Router, statically exported)
-│   ├── layout.tsx             # Fonts, providers, Navbar/Footer, pre-paint language boot script
-│   ├── page.tsx               # /             Hero, overview, live hub
-│   ├── events/page.tsx        # /events       Events board, game voting
-│   ├── about/page.tsx         # /about        Vision, pillars, stats, leadership roster
-│   ├── leaderboard/page.tsx   # /leaderboard  Hall of Fame
-│   ├── join/page.tsx          # /join         Registration form
-│   ├── not-found.tsx
-│   ├── globals.css            # Tailwind v4 theme: brand palette, light/dark tokens, RTL rules
-│   ├── icon.png               # Favicon (transparent, 256px)
-│   └── apple-icon.png         # iOS home-screen icon (on navy, 180px)
-├── components/
-│   ├── ui/                    # Atomic primitives, no app state
-│   │   ├── Button.tsx         #   Button, ButtonLink (internal → <Link>, external → new tab)
-│   │   ├── Card.tsx           #   Card, cardClass()
-│   │   ├── Badge.tsx · IconTile.tsx · Logo.tsx · SocialLinks.tsx · BrandIcons.tsx
-│   │   ├── Form.tsx           #   TextField, TextAreaField, SelectField, ChipGroup, RadioCards, FormSection, …
-│   │   └── Reveal.tsx · SectionHeading.tsx
-│   ├── layout/                # Navbar, MobileNav, Footer, LangToggle, ThemeToggle, SkipLink
-│   ├── sections/              # Page sections (Hero, EventsBoard, EventCard, GameVoting, SuggestGameForm, …)
-│   └── providers/             # Providers (next-themes + language + motion), LanguageProvider / useLang()
-├── lib/
-│   ├── content.ts             # Typed, sorted access to /data (the only module that imports JSON)
-│   ├── navigation.ts          # Route list + active-link helper shared by Navbar, MobileNav, Footer
-│   ├── formspree.ts           # Browser → Formspree submission helpers
-│   ├── hooks/use-form-submission.ts  # Shared idle/sending/sent/error state for every form
-│   ├── i18n/dictionary.ts     # UI strings, EN + AR (AR is type-checked against EN)
-│   ├── i18n/form-options.ts   # Registration choices (English values, localized labels)
-│   ├── i18n/localize.ts       # pick(), formatDate(), direction, storage key
-│   └── utils.ts               # cn(), asset() (basePath for images), initials()
-├── types/                     # Entity types: i18n, event, player, game, site (barrel: "@/types")
-├── data/                      # ← THE CMS (bilingual JSON). Edit these on GitHub.
-├── public/                    # logo-transparent.png (UI), logo.png (share previews), roster/, games/, .nojekyll
-├── scripts/validate-data.mjs  # Content schema check; runs before every build
-├── .github/workflows/deploy.yml
-└── PROFESSOR_GUIDE.md
-```
+- **ترتيب الفعاليات تلقائي** (المباشرة أولًا، ثم القادمة حسب التاريخ، ثم السابقة)، والتاريخ والحالة يُكتبان على البطاقة تلقائيًا.
+- بعد انتهاء الفعالية غيّر `upcoming` إلى `completed` فتنتقل إلى «السابقة» ويختفي زر التسجيل.
+- لإضافة صورة للفعالية ضع داخل `<div class="event-cover">` السطر: `<img src="https://رابط-الصورة.jpg" alt="">`
 
-**Dependency direction:** `app` → `components/sections` → `components/ui` + `lib` → `types`.
-UI primitives never read app state; sections get data from pages via props and text via `useLang()`.
+### 👤 إضافة عضو إلى المجلس
+ابحث عن `▼▼▼ MEMBER ▼▼▼`، انسخ الكتلة كاملة والصقها في المكان الذي تريد أن يظهر فيه العضو، ثم عدّل المنصب والاسم والتخصص واللعبة.
+- **الصورة (اختياري):** ارفع صورة مربعة إلى مجلد `assets/roster` ثم ضع داخل `<div class="member-photo">` السطر:
+  `<img src="assets/roster/اسم-الملف.jpg" alt="">`
+- بدون صورة يظهر أول حرفين من الاسم الإنجليزي تلقائيًا.
+- لحذف عضو احذف كتلته كاملة.
 
-## Scripts
+### 🤝 الرعاة (Clix)
+ابحث عن `▼▼▼ SPONSOR ▼▼▼`. لإظهار شعار الراعي ارفع الشعار إلى مجلد `assets`، ثم استبدل النص `CLIX` بالسطر:
+`<img src="assets/clix-logo.png" alt="Clix" class="h-14 w-auto">`
+واستبدل `href="#"` برابط موقع الراعي.
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Dev server at http://localhost:3000/ESPORTCLUB/ |
-| `npm run validate` | Check `/data/*.json` against the content schema |
-| `npm run typecheck` | `tsc --noEmit` (strict, no unused locals/params) |
-| `npm run check` | validate + typecheck |
-| `npm run build` | Validate, then static export to `./out` |
+### ✏️ نصوص أخرى
+- **الأرقام** (عدد الأعضاء، البطولات…): ابحث عن `150+` أو عن `Club numbers`.
+- **الرؤية ومحاور النادي:** في قسم `ABOUT`.
+- **روابط التواصل والبريد:** في قسم `FOOTER` (ابحث عن `Social links`).
 
-## How i18n and theming work
+### ⚠ تجنّب هذه الأخطاء
+- لا تحذف علامات `<` أو `>` أو علامات التنصيص `"`.
+- انسخ الكتلة **كاملة** من سطر `▼▼▼` إلى سطر `▲▲▲`.
+- إذا ظهر شيء غريب بعد التعديل: افتح الملف على GitHub ← **History** (أيقونة الساعة) ← اختر النسخة السابقة لاسترجاعها. لا يضيع أي شيء.
 
-- **Language:** `LanguageProvider` holds the active language (default `en`) and saves the choice in
-  `localStorage` (`pmu-lang`). Pages are pre-rendered in English. For returning Arabic visitors, a tiny inline
-  script in `<head>` sets `lang="ar" dir="rtl"` before first paint and briefly hides the page until React
-  swaps the text, which avoids both a flash of English and a hydration mismatch.
-- **RTL:** components use logical utilities (`ms-/me-/ps-/pe-/start-/end-/text-start`) plus `rtl:` variants
-  (icon flips, gradient directions). Arabic switches to the Cairo font and drops letter-spacing.
-- **Theme:** `next-themes` with `attribute="class"` and `defaultTheme="dark"`. Tailwind v4's equivalent of
-  `darkMode: "class"` is `@custom-variant dark` in `globals.css`. Colors are semantic tokens (`bg-bg`,
-  `text-fg`, `text-muted`, `border-line`, `text-accent`…) that switch values under `.dark`.
+### 📝 التسجيل في النادي
+نموذج «انضم إلى النادي» يرسل الحقول الستة (الاسم، الرقم الجامعي، البريد، الجوال، التخصص، السنة الدراسية) إلى **Formspree** (النموذج `mqparrqb`). تصل التسجيلات إلى بريد Formspree، ولا يحتاج الموقع إلى قاعدة بيانات.
 
-## Deploy (GitHub Pages)
+---
 
-Live at **https://mbalomarr.github.io/ESPORTCLUB/**
+## For developers (English)
 
-- `next.config.mjs` uses `output: "export"`, `basePath: "/ESPORTCLUB"`, `trailingSlash: true` and
-  unoptimized images, so `npm run build` produces a fully static site in `./out`.
-- `.github/workflows/deploy.yml` builds and publishes `./out` on every push to `main`, including JSON edits
-  made in the GitHub web editor (live about 2 minutes later; progress shows in the **Actions** tab).
-- **One-time setup:** repo **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-- Site-relative image paths in `/data` (e.g. `/roster/ahmed.jpg`) get the base path added automatically
-  by `asset()` in `lib/utils.ts`. If the repo is renamed, update `basePath` in `next.config.mjs`.
-- Give the professor **Write** access to the repo (Settings → Collaborators).
-
-## Forms (no backend)
-
-Create a free form at formspree.io and paste its ID into `data/site.json → forms`.
-Registration, votes and suggestions all post directly from the browser to Formspree.
-Alternatively set `googleFormEmbedUrl` to embed a Google Form instead.
-
-> Voting note: with no database, duplicate votes are prevented per browser (localStorage) and every
-> vote lands in the Formspree inbox. Admins copy official totals into `games.json`. For real-time
-> shared tallies later, add a small key-value store (e.g. a hosted service such as Supabase or Firebase, called from the browser).
+- **Stack:** a single static `index.html`. Tailwind CSS v4 runs from a CDN (`@tailwindcss/browser`), fonts come from Google Fonts, and a small inline script at the end of the file handles the EN/AR switch, dark/light theme, mobile menu, event dates, sorting and filters, member initials, and the Formspree submission. No build step, no dependencies.
+- **Assets:** `assets/` holds the logo (`logo-transparent.png` for the UI, `logo.png` for social previews), `icon.png` / `apple-icon.png`, and `roster/` for member photos. All paths are relative, so the site works from any folder or domain.
+- **Bilingual content:** text is written as `<span class="en">…</span><span class="ar">…</span>`. CSS hides the inactive language based on `<html lang>`. Attributes use `data-label-en/ar`, `data-placeholder-en/ar` and `<option data-en/ar>`.
+- **Preferences:** `localStorage` keys `pmu-lang` and `theme`, applied by an inline script in `<head>` before first paint.
+- **Hosting:** production is MonsterASP (IIS); see `MONSTERASP_DEPLOYMENT.md`. `.github/workflows/deploy.yml` also publishes `index.html` and `assets/` to GitHub Pages as a preview on every push.
+- **Local preview:** open `index.html` directly in a browser, or serve the folder with any static server.

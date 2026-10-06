@@ -1,9 +1,2 @@
-node_modules
-.next
-out
-.env*.local
-*.tsbuildinfo
 .DS_Store
-
-# Local editor/preview config
 .claude

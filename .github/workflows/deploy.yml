@@ -1,6 +1,7 @@
-# Builds the static export (./out) and publishes it to GitHub Pages on every push to main,
-# including content edits the professor makes to /data/*.json in the GitHub web editor.
-name: Deploy to GitHub Pages
+# Publishes the site as-is (no build step) to GitHub Pages on every push to main,
+# as an online preview at https://mbalomarr.github.io/ESPORTCLUB/.
+# The production site is uploaded manually to MonsterASP (see MONSTERASP_DEPLOYMENT.md).
+name: Deploy preview to GitHub Pages
 
 on:
   push:
@@ -12,54 +13,23 @@ permissions:
   pages: write
   id-token: write
 
-# One deployment at a time; let an in-progress deploy finish rather than cancelling it.
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Setup Node
-        uses: actions/setup-node@v5
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Restore Next.js build cache
-        uses: actions/cache@v4
-        with:
-          path: .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx', '**/*.json', '**/*.css') }}
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-
-
-      - name: Install dependencies
-        run: npm ci
-
-      # Runs scripts/validate-data.mjs first; a broken JSON edit stops here and the live site is untouched.
-      - name: Build static site
-        run: npm run build
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: ./out
-
   deploy:
-    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - uses: actions/checkout@v5
+      - uses: actions/configure-pages@v5
+      - name: Collect site files
+        run: mkdir _site && cp -R index.html assets _site/
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./_site
+      - id: deployment
         uses: actions/deploy-pages@v4
